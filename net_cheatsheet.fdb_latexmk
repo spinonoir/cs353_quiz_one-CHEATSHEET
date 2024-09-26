@@ -1,14 +1,12 @@
 # Fdb version 4
-["pdflatex"] 1727369197.65991 "/Users/jarret/Documents/2024 Fall USC/CSCI 353 - Introduction to Internetworking/quiz 1/cs353_quiz_one-CHEATSHEET/net_cheatsheet.tex" "net_cheatsheet.pdf" "net_cheatsheet" 1727369198.3543 0
-  "/Users/jarret/Documents/2024 Fall USC/CSCI 353 - Introduction to Internetworking/quiz 1/cs353_quiz_one-CHEATSHEET/net_cheatsheet.tex" 1727369197.46975 6029 a2a5cd3e6a4627c9d259ef3dc203eac0 ""
+["pdflatex"] 1727370154.62436 "/Users/jarret/Documents/2024 Fall USC/CSCI 353 - Introduction to Internetworking/quiz 1/cs353_quiz_one-CHEATSHEET/net_cheatsheet.tex" "net_cheatsheet.pdf" "net_cheatsheet" 1727370155.37652 0
+  "/Users/jarret/Documents/2024 Fall USC/CSCI 353 - Introduction to Internetworking/quiz 1/cs353_quiz_one-CHEATSHEET/net_cheatsheet.tex" 1727370154.40882 18104 1538662d72b24fe19869adfd46fd97c9 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/tcrm0800.tfm" 1136768653 1536 05df9db6aeccc4eea94fec15c9024f79 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
-  "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm" 1136768653 1332 f817c21a1ba54560425663374f1b651a ""
-  "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm" 1136768653 1344 8a0be4fe4d376203000810ad4dc81558 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm" 1136768653 1332 1fde11373e221473104d6cc5993f046e ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm" 1136768653 1520 eccf95517727cb11801f4f1aee3a21b4 ""
@@ -19,7 +17,6 @@
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1248133631 34811 78b52f49e893bcba91bd7581cdc144c0 ""
-  "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb" 1248133631 32378 2b20eba6bb36c716382b6d96240eaa69 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb" 1248133631 32166 b0c356b15f19587482a9217ce1d8fa67 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb" 1248133631 37166 8ab3487cbe3ab49ebce74c29ea2418db ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1248133631 35469 70d41d2b9ea31d5d813066df7c99281c ""
@@ -146,9 +143,9 @@
   "/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1711401126.50183 5467645 128b85b7cde5f5edc5cb7f1dd7ff8736 ""
   "/usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1711401104 8221435 a1298829516c6347acfece1b122d0737 ""
   "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
-  "net_cheatsheet.aux" 1727369198.28351 162 55205a9e8a8eca30d36afb389b0617bf "pdflatex"
-  "net_cheatsheet.out" 1727369198.12397 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "net_cheatsheet.tex" 1727369197.46975 6029 a2a5cd3e6a4627c9d259ef3dc203eac0 ""
+  "net_cheatsheet.aux" 1727370155.30842 162 87159b23cce7c2b923b11c85495bbd6d "pdflatex"
+  "net_cheatsheet.out" 1727370155.09288 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "net_cheatsheet.tex" 1727370154.40882 18104 1538662d72b24fe19869adfd46fd97c9 ""
   (generated)
   "net_cheatsheet.aux"
   "net_cheatsheet.log"
