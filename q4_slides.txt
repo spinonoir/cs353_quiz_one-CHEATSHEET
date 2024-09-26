@@ -1,0 +1,4141 @@
+Introduction to Networking
+
+Ramesh Govindan
+August 26, 2024
+
+Acknowledgements
+
+All materials for this course adapted from
+courses developed by Morley Mao, Mosharaf
+Chowdhury, Aditya Akella, Sugih Jamin, Philip
+Levis, Sylvia Ratnasamy, Peter Steenkiste, and
+many other colleagues.
+
+Many figures and slides borrowed from Jim
+Kurose and Keith Ross’s textbook and slides.
+
+Recommended text book
+
+1 / 49
+
+A Data Network
+
+Consists of
+• links that interconnect
+• … hosts and routers in order to
+
+router
+
+• … move data between hosts via routers
+• hosts also called end systems
+• routers sometimes called switches
+
+link
+
+host
+
+The Internet
+• A large, global, data network
+• Focus of this class
+
+2 / 49
+
+The Internet
+
+Connects many types of hosts
+
+Today
+• many devices Internet-connected
+• even ones you might not have
+thought were
+
+3 / 49
+
+A Macroscopic View
+
+How hosts connect to the network
+
+Hosts
+
+Wireless
+
+• laptops
+• smartphones
+• other smart devices
+
+Links
+• wired
+• wireless
+
+Wired
+
+4 / 49
+
+A Macroscopic View
+Networks and Routers
+
+Routers
+• wireless access points
+• cell towers
+• wired switches
+
+Networks
+• local ISPs
+• campus networks
+• national ISPs
+
+5 / 49
+
+A Macroscopic View
+Who owns routers and links?
+
+The Internet
+
+Networks
+• owned and managed by different entities
+• e.g., USC, AT&T, Verizon
+
+Collection of networks constitutes Internet
+
+6 / 49
+
+A Macroscopic View
+Services
+
+Search
+
+Many services
+• run on the Internet
+• e.g., Zoom, Google search
+
+Zoom
+
+• implemented using software (e.g., apps)
+
+7 / 49
+
+A Macroscopic View
+Services use the Internet
+
+Search
+
+Networks
+• carry traffic between hosts
+• e.g., video in Zoom call, query in search
+
+8 / 49
+
+A Macroscopic View
+
+But how do networks communicate?
+
+IP
+
+Standardized communication
+• the Internet Protocol
+• a universal language for communicating
+data
+• described in RFC 791 (a standards
+document)
+
+9 / 49
+
+The Need for Routers and Networks
+Why not connect hosts directly?
+
+Directly connecting N hosts
+• to each other would require N2 links!
+• much cheaper to have a shared network
+• if not everyone communicates
+• … with everyone else all the time!
+
+Other networks built this way
+• the road network
+
+United airlines network
+
+• the airline network
+
+10 / 49
+
+A Shared Network
+
+Sharing!
+
+Apps and Hosts
+• share routers and links
+• red and blue traffic go over same link
+
+11 / 49
+
+Two Ways to Share Switched Networks
+
+Circuit Switching
+
+Packet Switching
+
+12 / 49
+
+Circuit switching
+What is it?
+
+Circuit
+• a connection between sender and receiver
+• … with dedicated resources
+
+Analogy
+• multiple lanes between each pair of routers
+• circuit uses one of these lanes at each hop
+
+13 / 49
+
+Circuit switching
+How is it implemented?
+
+Frequency-division multiplexing
+• optical cables have different frequencies
+• each circuit sent on a different frequency
+
+Time-division multiplexing
+• data from different connections
+• .. sent in different time slots
+Implementing Circuit Switching
+
+14 / 49
+
+Aside: Multiplexing and De-Multiplexing
+
+Multiplexing
+• combine multiple streams into a single
+stream
+• e.g., multiple connections into traffic on a
+link
+
+De-multiplexing
+• disentangle multiple streams from single
+stream
+Implementing Circuit Switching
+
+15 / 49
+
+Packet Switching
+What is a packet?
+
+Packet
+• a unit of data transmitted on network
+• have a maximum size (L bits in figure)
+• large transfers divided into multiple packets
+
+16 / 49
+
+Packet Switching
+
+What do routers do with packets?
+
+Store and Forward
+• router waits to receive full packet
+• stores it locally
+• forwards it towards destination
+
+17 / 49
+
+Packet Switching
+Queueing at routers
+
+Queue
+• a sequence of packets stored in a router
+• … waiting to be transmitted
+
+Queues form
+• packets arrive faster than can be sent out
+• if queue is large, router may drop packet
+
+A packet-switched network can drop traﬀic
+
+18 / 49
+
+Which Is Better?
+Pros and Cons
+
+Packet switching
+
+Circuit switching
+Pros
+
+Pros
+
+• Predictable performance
+
+• No circuit setup, faster transfers
+
+• Simple/fast switching (once circuit
+established)
+
+• Easier failure handling, re-route on different
+path
+
+Cons
+• Complexity and delay of circuit
+setup/teardown
+• If switch fails, its circuit(s) fails
+
+Cons
+• Packets can be dropped, impacting
+performance
+• Queueing can add delays
+
+19 / 49
+
+Statistical Multiplexing
+
+Why the Internet uses packet switching
+
+Computer communication is bursty
+• applications/services have on/off behavior
+• send traffic, stay silent, then send traffic again
+
+Packet switched networks
+• can more efficiently support bursty traffic
+• because of statistical multiplexing
+
+20 / 49
+
+Statistical Multiplexing
+An Example
+
+Circuit switching
+• can only support 10 users
+• must build network for worst case
+• (or must drop call)
+
+Packet switching
+• can support 35 users
+• because probability that all 10 users
+• … are active at the same time is 0.0004
+
+21 / 49
+
+Statistical Multiplexing
+Overload
+
+Statistical multiplexing
+• with high probability, support more users
+• (or, build a cheaper network)
+
+Overload
+• when more than 10 users arrive together
+• refuse service, or degrade service
+
+Statmux widely used in shared resources
+
+22 / 49
+
+Course Focus: Packet-switched networks
+
+23 / 49
+
+What Can a Network Do to a Packet?
+One of two things!
+
+1
+
+Delay the packet (e.g., queueing at router)
+
+2
+
+Drop the packet (e.g., when queue is full)
+
+Both can reduce traﬀic rate
+
+24 / 49
+
+Measures of Network Performance
+
+1
+
+End-to-end delay
+
+2
+
+Packet loss rate
+
+3
+
+Throughput
+
+25 / 49
+
+End-to-end Delay
+
+Let
+• tsent be time sent
+
+End-to-end delay
+
+• trec time received
+
+End-to-end delay
+• trec − tsent
+
+26 / 49
+
+Components of End-to-end Delay
+Delays within a single router
+
+Components
+
+Depends upon
+
+Transmission (dtrans )
+
+Link speed
+
+Propagation (dprop )
+
+Link distance
+
+Queuing (dqueue )
+
+Traffic on link
+
+Processing (dproc )
+
+CPU on switch
+
+drouter = dqueue + dproc + dprop + dtrans
+
+27 / 49
+
+Transmission delay
+
+Time to push all bits onto a link
+
+Let
+• L: packet size (length) in bits
+• R: link transmission rate (bits per second)
+• R is sometimes called link bandwidth
+dtrans = L/R
+
+28 / 49
+
+Propagation delay
+
+Time to send one bit from one router to next
+
+Let
+• d: length of physical link
+• s: propagation speed (approx. speed of
+light)
+dprop = d/s
+
+29 / 49
+
+Packet Delay: Sending a 100-Byte Packet
+The difference between propagation and transmission delay
+
+Higher bandwidth → lower
+transmission latency
+
+30 / 49
+
+Pipe Model of a Link
+What is a model?
+
+Model
+• a mathematical or mental construct
+• … that helps understand a physical process
+
+Pipe model
+• A link is not really a pipe (it doesn’t carry
+water!)
+• But we can use a pipe to understand link
+behavior
+
+Will use this later in the course
+
+31 / 49
+
+Pipe Model of a Link
+
+Pipe
+• width is link bandwidth
+• length is time
+• packet is a blob
+• packet width is transmission time
+
+Higher bandwidth
+• means wider pipe
+• … so smaller packet width
+• (packet size stays the same)
+
+32 / 49
+
+Queueing
+
+Why do queues form at routers?
+
+If packets
+• arrive faster than
+• .. router can process
+• .. they are placed into a queue
+
+Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Transient overload when packets are queued
+
+33 / 49
+
+Queueing
+
+Why do queues form at routers?
+
+If packets
+• arrive faster than
+• .. router can process
+• .. they are placed into a queue
+
+Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Transient overload when packets are queued
+
+33 / 49
+
+Queueing
+
+Why do queues form at routers?
+
+If packets
+• arrive faster than
+• .. router can process
+• .. they are placed into a queue
+
+Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Transient overload when packets are queued
+
+33 / 49
+
+Queueing
+
+Why do queues form at routers?
+
+If packets
+• arrive faster than
+• .. router can process
+• .. they are placed into a queue
+
+Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Transient overload when packets are queued
+
+33 / 49
+
+Queueing
+
+Why do queues form at routers?
+
+If packets
+• arrive faster than
+• .. router can process
+• .. they are placed into a queue
+
+Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Transient overload when packets are queued
+
+33 / 49
+
+Queueing
+
+When do queues never form?
+
+If router
+• can process and send packets
+• .. faster than they arrive
+• .. no queues
+
+34 / 49
+
+Queueing
+
+When do queues never form?
+
+If router
+• can process and send packets
+• .. faster than they arrive
+• .. no queues
+
+34 / 49
+
+Queueing
+
+When can a router drop packets?
+
+If router
+• runs out of memory (buffer)
+• … it may drop a packet
+
+35 / 49
+
+Queueing
+
+Transient and Persistent Queues
+
+Depends on
+• Arrival rate at the queue
+• Nature of arriving traffic (bursty or not?)
+• Transmission rate of outgoing link
+
+Transient Queues
+• short-lived
+• caused by bursty traffic
+
+Persistent Queues
+• (relatively) long-lived
+• caused by high total arrival rate
+
+36 / 49
+
+Queueing Delay
+
+Per-packet Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Characterized by statistical measures
+• Average queuing delay
+• Variance of queuing delay
+• Probability delay exceeds a threshold value
+
+37 / 49
+
+Aside: Queueing Theory
+The mathematics underlying queueing
+
+Complex mathematical discipline
+• studies queue behavior
+• under different arrival patterns
+• … different numbers of queues
+• … different queue processing (service)
+times
+
+Little’s Law, a basic result
+• a powerful result
+
+Terminology
+
+Notation
+
+Average Arrival Rate
+
+λ
+
+Average Wait Time
+
+W
+
+Average Length of Queue
+
+L
+
+• independent of arrival pattern
+• and service times
+L=λ×W
+
+38 / 49
+
+Processing Delay
+
+Router processing
+• read packet
+• … maybe modify it slightly
+
+dproc
+• is usually neglible
+
+39 / 49
+
+End-to-End Delay
+
+Delay at router
+drouter = dqueue + dproc + dprop + dtrans
+
+End-to-end delay
+• sum of delays at each router
+Σrouter drouter
+
+40 / 49
+
+End-to-End Delay
+Why do delays add up?
+
+Store-and-forward router
+• waits to receive full packet
+• before processing packet
+
+41 / 49
+
+Measures of Network Performance
+
+1
+
+End-to-end delay
+
+2
+
+Packet loss rate
+
+3
+
+Throughput
+
+42 / 49
+
+Packet Loss Rate
+
+Let
+• N be number of packets sent
+• l be number of packets dropped (or lost)
+• p be packet loss rate
+p = l/N
+
+43 / 49
+
+Packet Loss Rate
+
+Recovering from packet loss
+
+Hosts/applications
+• detect when a packet is lost
+• retransmit lost packets to recover from loss
+
+44 / 49
+
+Throughput
+Definitions
+
+Throughput
+• if B bits transferred from sender to receiver
+• … in time t
+• throughput = B/t
+
+Instantaneous throughput
+• when t is small
+• … usually a few milliseconds
+
+Average throughput
+• t is longer
+• … often the duration of a connection
+• can be less than instantaneous throughput
+45 / 49
+
+Throughput
+
+Dependence on link speed
+
+Throughput limited by link speed
+• Pipe model helps us understand this
+• Cannot be larger than Rc or Rs
+
+In this example
+• throughput less than min Rs , Rc
+• corresponding link is the bottleneck
+
+46 / 49
+
+Throughput
+
+Throughput across a network
+
+Traffic may share a link
+• network gives fair share of link bandwidth
+• in example, each connection get R/10 on
+backbone
+
+Where is the bottleneck?
+• can be Rc (e.g., home network)
+• or the backbone link
+• or the server link Rs
+
+47 / 49
+
+Summary
+
+Elements of Network
+
+Links, hosts, routers
+
+Internet
+
+Network of networks
+
+Sharing
+
+Circuit vs packet switching
+
+Packet switching
+
+Multiplexing, packet loss, queueing
+
+Measures
+
+Loss Rate, Delay, Throughput
+
+48 / 49
+
+Additional Reading
+
+1.1, 1.3, 1.4
+
+49 / 49
+
+Layering and Protocols
+
+Ramesh Govindan
+September 3, 2024
+
+A Web Request
+
+User
+• types URL into browser
+
+Request
+
+Browser
+• sends request to server over the Internet
+Response
+
+Server
+• responds with page contents
+
+1 / 41
+
+Under the Hood
+How requests are sent
+
+Browser
+• gets address of the destination
+Address of server
+
+Your device OS sends
+• the request to a nearby router
+• … which hands it off to the next router
+• in possibly a different ISP
+
+Until
+• the request reaches the destination
+
+Path of packet
+
+2 / 41
+
+Under The Hood
+How the server responds
+
+Server
+• knows your device’s address
+• it’s in the request!
+
+Sends response
+• to its nearest router
+• … which hands it off to another router
+
+Your OS
+• gets the response
+• sends it to browser
+• which displays web page
+
+3 / 41
+
+Under The Hood
+
+This picture is highly simplified!
+
+The Internet is a complex system with
+• billions of users and devices
+• millions of routers
+• tens of thousands of ISPs
+• hundreds of device types
+• tens of communication media
+
+How can we tame this complexity?
+
+4 / 41
+
+Lecture Outline
+
+1
+
+Layering
+
+2
+
+Protocols
+
+3
+
+Internet Layering Implementation
+
+• Layers in the airline system
+• Layers in the Internet
+• What is a protocol?
+• How does it relate to layering?
+• The where, why and how
+• Logical and physical views of layering
+
+5 / 41
+
+Taming Complexity: The Airline System
+Another global, complex system
+
+Ticketing
+• agent or website handles purchase
+
+At departure gate
+• agent takes ticket and baggage
+
+Baggage handlers, gate agents
+• load you and baggage on flight
+
+6 / 41
+
+Taming Complexity: The Airline System
+Each depends on the next
+
+Airport tower
+• handles takeoff and landing
+
+Air traffic control
+• routes plane through airspace
+
+7 / 41
+
+The Airline System and Layering
+Helps simplify and understand a complex system
+
+System decomposed into layers
+• each layer provides a service
+• … and uses the service provided by the
+layer below
+
+Examples
+• baggage needs gate service
+• plane cannot move without tower’s consent
+• tower cannot permit taxiing without air
+traffic control
+
+8 / 41
+
+The Airline System and Layering
+How layering helps
+
+Each layer
+• does one thing
+• e.g., handle baggage, route aircraft
+
+Recursively, builds upon
+• services provided by lower layers
+
+Example
+• baggage makes it from departure counter
+• … to carousel at destination
+• because loading/unloading got it on plane
+• … tower got plane to land
+• … air traffic control routed flight
+9 / 41
+
+Lecture Outline
+
+1
+
+Layering
+
+2
+
+Protocols
+
+3
+
+Internet Layering Implementation
+
+• Layers in the airline system
+• Layers in the Internet
+• What is a protocol?
+• How does it relate to layering?
+• The where, why and how
+• Logical and physical views of layering
+
+10 / 41
+
+Taming Internet Complexity
+A possible decomposition into layers
+
+Application
+• hands off data to transport
+• e.g., Web request
+
+Transport
+• converts data into packets
+• reliably delivers data to destination
+
+Packet delivery
+• sends packets to destination
+• but, by itself, may not be reliable
+
+11 / 41
+
+Organizing Communication into Layers
+
+Layer decomposition
+• application layer at the top
+• physical layer at the bottom
+• a general decomposition for the Internet
+Communication Layers
+
+12 / 41
+
+Standardizing Layers
+What are standards?
+
+Standard
+• an (international) agreement
+• on some aspect of engineered or physical
+systems
+
+Examples
+• times and time zones
+• minimum lane width on roads
+• telephone country codes
+
+13 / 41
+
+Standardizing Layers
+Why do we need them?
+
+Why do we need them?
+• to interoperate
+• e.g., everyone has the same notion of time
+• or, cars built one place can be driven in
+another
+
+In our case
+• so computers designed by different
+manufacturers
+• … can communicate
+
+14 / 41
+
+Standardizing Layers
+How are standards set?
+
+By agreement
+• lots of discussion and debate!
+
+At standards bodies
+• International Standards Organization (ISO)
+• Institution of Electrical and Electronics
+Engineers (IEEE)
+• Internet Engineering Task Force (IETF)
+• International Telecommunication Union
+(ITU)
+
+15 / 41
+
+Standardizing Layers
+The ISO OSI Model
+
+OSI Model
+• Open Systems Interconnection (OSI)
+• a model for how to layer computer
+communications
+
+Seven Layers
+• similar to earlier decomposition
+• today: session and presentation integrated
+into application
+
+16 / 41
+
+Layers in Networking
+
+Layer
+• a part of a system
+• … with well-defined interfaces to other parts
+
+Each layer interacts
+• only with layer above and layer below
+
+Two layers interact
+• only through the interface between them
+
+17 / 41
+
+Lecture Outline
+
+1
+
+Layering
+
+2
+
+Protocols
+
+3
+
+Internet Layering Implementation
+
+• Layers in the airline system
+• Layers in the Internet
+• What is a protocol?
+• How does it relate to layering?
+• The where, why and how
+• Logical and physical views of layering
+
+18 / 41
+
+Layers And Protocols
+
+Communication
+• between peer layers on different systems
+• is defined by protocols
+
+19 / 41
+
+What Is A Protocol?
+In the colloquial sense
+
+Socio-cultural conventions
+• that govern human interactions
+• … and communications
+
+Examples
+• greeting someone before conversing
+• (in some cultures) bowing before elders
+
+20 / 41
+
+What Is A Protocol?
+In computer communication
+
+Rules
+• governing communication between
+computers
+• … in the form of messages
+
+Specify
+• message format and order
+• actions upon message receipt
+
+Examples of protocols
+• TCP, IP, BGP, HTTP, SIP, …
+• will study many of these in class
+
+21 / 41
+
+What Is A Protocol?
+What is a message?
+
+Message contains
+• header and payload
+• payload: content of message (e.g., web
+page response)
+• header: instructions on how to process
+payload
+
+Messages can be processed
+• at router
+• at sender or receiver
+
+22 / 41
+
+Protocols At Different Layers
+How layers communicate
+
+Key idea
+• peer layers communicate
+• each layer has one or more protocols
+• a layer’s protocol uses a protocol from layer
+below
+
+Examples
+• HTTP uses TCP
+• TCP uses IP
+• IP uses Ethernet
+
+23 / 41
+
+Protocols at Different Layers
+Encapsulation
+
+To use lower layer protocol
+
+HTTP message in TCP payload
+
+• add message as payload of lower-layer
+protocol
+• this idea is called encapsulation
+
+Result: a protocol stack!
+
+24 / 41
+
+Lecture Outline
+
+1
+
+Layering
+
+2
+
+Protocols
+
+3
+
+Internet Layering Implementation
+
+• Layers in the airline system
+• Layers in the Internet
+• What is a protocol?
+• How does it relate to layering?
+• The where, why and how
+• Logical and physical views of layering
+
+25 / 41
+
+Layer Implementation
+Where is a layer implemented?
+
+Network
+• has host and routers
+• should all devices have all layers?
+• might increase complexity
+
+Just as
+• ticketing at agent/online
+• can’t buy a ticket during flight!
+
+26 / 41
+
+Layer Implementation
+In the Internet
+
+Key idea
+• hosts implement all layers
+• routers implement subset
+
+Protocols implemented
+
+Software
+
+Hardware
+
+• either in software or hardware
+• (generally) higher layer protocols in software
+
+27 / 41
+
+Layer Implementation
+Hosts
+
+Must implement all layers
+• since they run applications
+• and application layer recursively
+• … uses protocols in layers below
+
+This means
+• your laptop, mobile device, smart watch
+• … run all protocol layers
+
+28 / 41
+
+Layer Implementation
+Routers
+
+Perform packet switching
+• (recall architecture discussion)
+• need only layers that switch packets
+
+Network layer
+• performs packet switching
+• but uses layers below it
+• … so these need to be in routers too!
+
+29 / 41
+
+Layer Implementation
+Why this way?
+
+Routers do less work
+• can be cost-effective
+• … and fast!
+
+Helps network scale
+• can build a global network
+• that supports many applications
+• at reasonable cost
+• with good performance
+• … and reliability
+
+Not all networks designed this way!
+
+30 / 41
+
+Layer Implementation
+Downsides of layering
+
+Header overhead
+• each layer adds headers
+• must be transmitted on network
+• adds overhead
+
+Information Hiding
+• upper layers don’t know
+• … what lower layers are doing
+• cross-layer information can be useful
+
+31 / 41
+
+Layer Implementation
+A single network protocol
+
+Explains why
+• there is a single network layer protocol
+• IP: Internet Protocol
+
+All devices
+• must ”talk” at least one common protocol
+• cannot interoperate otherwise
+
+32 / 41
+
+Layer Implementation
+A single network protocol
+
+IP layer
+• waist of an hour-glass
+• ties together protocols above and below
+
+Helped Internet evolve
+• new transport and application protocols
+• new datalink and physical layer protocols
+• … but IP has remained (almost) unchanged
+
+33 / 41
+
+Layer Implementation
+Where in the host?
+
+Application
+• Web server, browser, mail, games
+
+Transport and network layer
+• typically part of the operating system
+
+Datalink and physical layer
+• hardware/firmware/drivers
+
+34 / 41
+
+Layer Implementation
+Aside: Switches vs. Routers
+
+We use the terms
+• interchangeably
+• for most of the class
+
+Historically
+• a switch was an even simpler device
+• ran only data link and physical layers
+• performed local delivery
+
+35 / 41
+
+Lecture Outline
+
+1
+
+Layering
+
+2
+
+Protocols
+
+3
+
+Internet Layering Implementation
+
+• Layers in the airline system
+• Layers in the Internet
+• What is a protocol?
+• How does it relate to layering?
+• The where, why and how
+• Logical and physical views of layering
+
+36 / 41
+
+Layered Communication
+The Logical View
+
+A layer on one host
+• interacts with its peer layers
+
+A
+
+B
+
+• … in another host
+
+Logical communication
+• application layer on A
+• … thinks it is talking
+• … to application layer on B
+
+37 / 41
+
+Layered Communication
+The Physical View
+
+What actually happens?
+• on A, messages flow
+
+A
+
+B
+
+• … downward through layers
+• on B, upward
+
+At routers
+• up to the network layer
+• … down again
+
+38 / 41
+
+Layered Communication
+A detailed physical view
+
+39 / 41
+
+Summary
+
+Layering and Protocols
+
+Complexity
+
+Comes from scale, tamed by layering
+
+Layering
+
+Each layer provides service,
+layer above uses service
+
+Protocol
+
+Message formats, processing rules
+
+Layered communication
+
+Protocols at each layer,
+encapsulation at lower layers
+
+Layer implementation
+
+Routers vs. hosts, OS vs application
+
+40 / 41
+
+Additional Reading
+
+1.5
+
+41 / 41
+
+The Web
+
+Ramesh Govindan
+September 4, 2024
+
+Widely-used Networked Applications
+
+Communication
+• E-mail
+
+Entertainment
+• Gaming
+• Video streaming (e.g., YouTube)
+
+• Text messaging
+• Social networking
+
+Information
+• Web (focus of this lecture)
+• Internet Search
+
+Telepresence
+• Voice over IP
+• Video conferencing (e.g., Zoom)
+
+Will learn later how many of these work
+
+1 / 55
+
+What is the Web?
+The Logical View
+
+Database of
+• hypertext documents
+
+Origins
+• in the 90s by Tim Berners-Lee at CERN
+• to facilitate scientific collaboration
+The Web: A Logical View
+
+2 / 55
+
+What is the Web?
+The Physical View
+
+Database
+• is distributed across many servers in the
+Internet
+• different hypertext documents on different
+servers
+
+Aside: Logical vs. Physical
+• logical view focuses on data relationships
+• physical view describes where data is stored
+• important distinction that will come up often
+
+The Web: The Physical View
+
+3 / 55
+
+What is the Web?
+Hypertext and Hyperlinks
+
+Hypertext
+• text containing hyperlinks
+
+Hyperlink
+• reference to a document containing
+hypertext
+• … or to other objects (audio, video)
+
+Hypertext example
+
+4 / 55
+
+What is the Web?
+
+Hypertext Markup Language
+
+HTML
+• language for marking up text
+• markups for formatting and hyperlinks
+HTML Example
+
+5 / 55
+
+What is the Web?
+How it works
+
+User
+• requests a hypertext document
+Request
+
+Browser
+• sends request to server over the Internet
+
+Server
+
+Response
+
+• responds with document contents (HTML)
+• browser renders the HTML
+
+6 / 55
+
+Focus of This Lecture
+
+How the Web works on the Internet
+• How to retrieve hypertext documents
+• How to make retrieval fast
+
+Request
+
+Aside: Functionality and Performance
+• How to retrieve hypertext documents →
+Functionality
+• How to make retrieval fast → Performance
+
+Response
+
+7 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+8 / 55
+
+Architecture
+
+Client-Server Architecture
+
+What is architecture?
+• how functions are distributed across
+network
+
+Clients
+• send requests to servers
+• examples: smartphone, laptop, desktop
+• may be intermittently connected
+
+Servers
+• return responses to clients
+• must be always on
+
+Web, Email, On-demand Video are client-server
+
+Client-server Architecture
+
+9 / 55
+
+Architecture
+
+Client-Server Architecture for the Web
+
+Clients
+• refers to software: browsers on laptops,
+smartphones
+• also refers to machine on which software
+runs: laptop, smartphone
+
+Servers
+• server software: Apache, nginx
+• refers to machine on which software runs:
+computer in a machine room
+Client-server Architecture
+
+10 / 55
+
+Architecture
+
+Aside: Are there other architectures?
+
+Peer-to-peer architecture
+• clients peer with each other and exchange
+information
+• no always-on servers
+
+Blockchains, file sharing
+
+Peer-to-peer Architecture
+
+11 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+12 / 55
+
+Naming and Addressing
+Fundamental concept in computing
+
+Name
+• a label assigned to object or entity (e.g.,
+person, computer)
+• sometimes required to be unique (globally,
+or within a country)
+
+Address (or Locator)
+• specifies where object or entity is located
+• examples: a person’s home address, a
+computer’s IP address
+
+Binding
+• association between name and locator
+• example: person’s name and their address
+• example: computer name (login.usc.edu)
+and IP address
+
+Sometimes a name also functions as a locator
+
+13 / 55
+
+Web Naming
+What to name
+
+What is named?
+• Initially, a hypertext document
+• Today, more generally, a Web object
+protocol://host-name[:port]/directory-path/resource
+Uniform Resource Locator (URL)
+
+Examples of Web objects
+• HTML files, video files, audio files, Javascript
+file
+• dynamically generated content (e.g., search
+content)
+
+14 / 55
+
+Web Naming
+
+URL is both a name and a locator
+
+Name
+• resource part of URL
+• names a Web object
+• by itself, not unique (e.g., index.html)
+protocol://host-name[:port]/directory-path/resource
+Uniform Resource Locator (URL)
+
+Address
+• protocol: how to retrieve object
+• host-name: which computer to find object
+• directory-path: where within computer
+
+URL for an object is globally unique
+
+15 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+16 / 55
+
+Web Object Retrieval
+
+Hypertext Transfer Protocol (HTTP)
+
+Request-response protocol
+• client sends request to server
+• waits to receive response from server
+
+Client
+• gets server name from host-name in URL
+• displays (renders) retrieved object
+
+Server
+• response includes requested object
+• may invoke processing to produce dynamic
+objects (search results)
+
+17 / 55
+
+Web Object Retrieval
+HTTP Request Message
+
+Parts
+• Request line
+• Header lines
+• Body
+
+Request line
+• method
+• resource path
+• protocol version
+
+18 / 55
+
+Web Object Retrieval
+
+HTTP Request Line: Method Types
+
+Method
+
+Function
+
+GET
+
+Download specified object
+
+HEAD
+
+Download headers of object
+
+POST
+
+Send form content
+
+PUT
+
+Upload specified file
+
+DELETE
+
+Remove object
+
+19 / 55
+
+Web Object Retrieval
+HTTP Request Line and Headers
+
+Resource path
+• name and path of resource
+• relative to server
+
+Protocol version
+• HTTP has undergone several revisions
+• v0.9, v1.1, v2 and now v3
+• versions backwards compatible
+
+Header lines
+• additional information
+• object size, client browser type, language
+used
+
+20 / 55
+
+Web Object Retrieval
+HTTP Request Body
+
+Body
+• empty for GET and HEAD
+• contains data for POST
+
+21 / 55
+
+Web Object Retrieval
+HTTP Response
+
+Status line
+• protocol version
+• status code (e.g., 200, 404)
+• status phrase (e.g., OK, File not found)
+
+Response headers
+• provide information
+
+Body
+• optional data
+
+22 / 55
+
+Web Object Retrieval
+How headers are sent in packets
+
+As ASCII text
+• many application protocols use this (e.g.,
+SMTP, FTP)
+• easy to implement, easy to debug
+• early versions of HTTP used this
+
+Binary
+• many lower level protocols use this
+• more efficient
+• more recent versions use this
+
+23 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+24 / 55
+
+Session State
+
+Understanding sessions
+
+What is a session?
+• an extended interaction between user and
+service
+• e.g., buying something on Amazon,
+scrolling through Facebook feed
+• can involve multiple HTTP
+requests/responses
+
+Add to
+cart
+
+Session
+
+Buy from
+
+cart
+
+Session state
+• information created during a session
+• and used in the same or another session
+• e.g., shopping cart, authentication token
+
+25 / 55
+
+Session State
+
+Persisting state across HTTP connections
+
+Problem
+• Request ( 1 ) adds to cart
+• How can request 2 tell server to use cart?
+
+Need
+• a way to store (persist) the cart on the server
+(state)
+• a way for the client to name the state
+
+1
+
+Add to
+cart
+
+2
+
+Buy from
+
+Session
+
+cart
+
+26 / 55
+
+Session State
+Cookies
+
+HTTP allows Cookies
+• Cookie is a token that names some state on
+server
+• e.g., can be a number 3456, server knows it
+refers to cart
+
+1
+
+Add to
+cart
+
+2
+
+Buy from
+
+Session
+
+How they work
+
+cart
+
+• server sends cookie in header of response
+to 1
+• client sends cookie in header of request 2
+
+27 / 55
+
+Session State
+
+A More Detailed Look at Cookies
+
+Server
+• stores state (cart) in backend database
+• creates a cookie, returns with response
+
+Browser
+• receives cookie, stores in local file
+• sends cookie to server along with
+subsequent requests
+
+Other uses
+• usage tracking, authentication
+Detailed Example
+
+Lots of privacy issues with cookies
+
+28 / 55
+
+Cookies Considered Harmful
+Can track website usage
+
+First-party cookies
+• installed by website you visit (e.g.,
+www.nytimes.com)
+
+Third-party cookies
+• installed by advertisers on website you visit
+(e.g., www.adx.com)
+• if the same advertiser is on another page,
+say www.latimes.com
+• they can know you visited both pages!
+
+Third-party cookies
+
+29 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+30 / 55
+
+Improving HTTP Performance
+
+Page load time
+• between click and display of page
+
+Impacts revenue
+• every 100ms increase led to 1% drop in revenue [Amazon]
+• every 0.5s increase in search led to 20% user drop [Google]
+
+31 / 55
+
+Background: HTTP and TCP
+HTTP Uses TCP
+
+HTTP message in TCP payload
+
+TCP
+
+Internet transport protocol that provides reliable
+delivery
+
+HTTP
+
+sends request and receives response using TCP
+
+32 / 55
+
+Background: HTTP and TCP
+Must set up TCP connection
+
+TCP Connection Setup
+
+TCP requires
+connection setup before sending request
+
+HTTP Request Response
+
+33 / 55
+
+Anatomy of a Page Load
+
+Steps
+• download base HTML page
+
+Example
+page x.html contains y.css and image z.png
+
+x.html
+Page Load Time
+
+• download linked object (CSS, images,
+javascript)
+• render page
+
+y.png
+
+z.css
+
+Render
+
+34 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+35 / 55
+
+Improving Performance: Persistent Connections
+
+Original design
+• open TCP connection for each object
+
+TCP Connection Setup
+
+• adds 2 round-trip times (RTTs)
+index.html
+
+Persistent connections
+
+send multiple requests and responses on the
+same connection
+
+y.png
+z.css
+
+36 / 55
+
+Improving Performance: Parallel connections
+Original design
+• All requests and responses in a single
+connection
+
+Parallel connections
+• Send connections to server over multiple
+connections
+• Fixed number of parallel connections (4)
+
+Drawback
+
+TCP Connection Setup
+
+index.html
+
+y.png
+
+z.css
+
+• Unfair to other users/browsers
+• Internet allocates resources fairly to TCP
+connections
+
+37 / 55
+
+Improving Performance: Pipelining
+
+Original design
+Send request after receiving response for
+previous request
+
+Pipeline requests
+Send multiple requests back-to-back
+
+TCP Connection Setup
+
+index.html
+
+Drawback: Head-of-line blocking
+• if y.img is large, z.css can be delayed
+
+y.png, z.css
+
+• more generally, small objects delayed
+behind large ones
+
+38 / 55
+
+Improving Performance: Prioritization
+
+Server responds
+In order in which requests are received
+
+Prioritization
+• Server sends some types of objects before
+others
+• CSS before images
+• Can start rendering before receiving all
+objects
+
+TCP Connection Setup
+
+index.html
+
+Server sends z.
+Start rendering
+
+39 / 55
+
+Improving Performance: QUIC
+A New Transport Protocol for Web
+
+Like TCP
+• connection oriented reliable transfer
+• looks to the network like a TCP connection
+
+Unlike TCP
+• has sub-connections inside QUIC connection
+• different requests on different sub-connections
+
+Advantages
+• fairer than parallel connections
+• avoids head-of-line blocking like pipelining
+
+40 / 55
+
+HTTP Versions
+
+Version Number
+
+Functionality
+
+1.0
+
+Non-persistent, parallel
+
+1.1
+
+Persistent, pipelining
+
+2.0
+
+Prioritization
+
+3.0
+
+QUIC
+
+41 / 55
+
+A Simple Performance Model
+How do these techniques help?
+
+Model
+• simplified version of some system
+• helps understand behavior of system
+
+Performance Model
+• for understanding performance
+• often uses mathematics
+
+HTTP Performance Model
+• assume TCP connection takes one
+round-trip time (RTT)
+• assume request/response takes one RTT
+
+Feature
+
+Number of RTTs
+
+Non-persistent
+
+2N
+
+Parallel
+
+2N/M
+
+Persistent
+
+N+1
+
+Pipelined
+
+2
+
+• assume page references N objects, M
+parallel connections
+42 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+43 / 55
+
+Caching
+
+The General Idea
+
+What is caching?
+A technique to speed up access to objects
+stored at some origin
+
+A
+
+B
+
+A
+
+B
+
+Key idea
+• A cache is a store of recently-accessed
+objects
+• Requestor can get object from cache
+instead of origin
+
+Faster
+1
+
+If object is frequently accessed
+
+2
+
+If cache is faster than origin
+
+Origin
+
+Cache
+
+Origin
+
+44 / 55
+
+Caching
+Terminology
+
+Locality of Reference
+• references to an object are nearby (local) in
+time
+• caching works for objects with high locality
+
+A
+
+B
+
+A
+
+B
+
+Hits and Misses
+hit object is in cache
+
+Origin
+
+Cache
+
+miss object is not in cache, must be
+fetched from origin
+
+Eviction
+• caches have limited storage
+
+Origin
+
+• if caches is full, may need to evict object to
+make room for another
+45 / 55
+
+Caching
+Terminology
+
+Eviction
+
+A
+
+B
+
+A
+
+B
+
+• caches have limited storage
+• if caches is full, may need to evict object to
+make room for another
+
+Origin
+
+Cache
+
+Stale object
+• if origin modifies object
+• cached copy is stale
+
+Origin
+
+46 / 55
+
+Caching
+Examples
+
+A
+
+Application
+
+Cache
+
+Origin
+
+File Systems
+
+DRAM
+
+Disk
+
+Process Memory
+
+On-chip
+
+DRAM
+
+B
+
+Origin
+
+A
+
+B
+
+Cache
+
+Origin
+
+47 / 55
+
+Browser Caching
+Browser
+• saves a copy of Web object page on disk
+• can use local copy when website revisited
+
+Advantages
+• speeds up page load time
+
+x.html
+
+• saves network bandwidth
+
+Very effective
+• for objects that don’t change often
+• images, stylesheets, javascript, videos
+
+y.png
+
+Cache objects on disk
+
+z.css
+
+Render
+
+But, how to determine if cache is stale?
+
+48 / 55
+
+Cache Control
+
+Determining and controlling staleness
+
+If-Modified-Since
+• header in request, contains time t
+• server returns object if modified after t
+• saves object download
+
+GET /somedir/page.html HTTP/1.1
+Host: www.someschool.edu
+User-agent: Mozilla/4.0
+If-modified-since: Wed, 18 Jan 2017 10:25:50 GM
+(blank line)
+
+Cache-Control
+• header in response, contains duration d
+• browser can cache for d seconds
+Cache control header
+
+49 / 55
+
+Proxy Caching
+
+Beyond browser caching
+
+Key idea
+• leverage locality across multiple users
+• two users accessing the same content
+
+How it works
+• configure browser to send all requests to
+proxy
+• if proxy does not have object, gets from
+origin
+• origin can use Cache-Control header
+
+Proxy cache
+
+50 / 55
+
+Forward Proxy
+Cache close to clients
+
+Common use case
+• cache inside a university or enterprise
+
+Benefits
+users low latency, since proxy closer
+than origin
+university less traffic, saves cost
+Forward proxy
+
+51 / 55
+
+Reverse Proxy
+Cache close to origin
+
+Common use case
+• one or more caches in front
+• … of origin servers
+
+Benefits
+users small latency benefit (if
+in-memory cache)
+content provider reduce load on origin, save
+cost
+
+Reverse proxy
+
+52 / 55
+
+Caching Efficacy
+
+Quantifying benefit of caching
+
+Hit rate
+• fraction h of requests
+• … whose content is in cache
+
+Latency benefit
+• latency to cache is dc
+• latency to origin is do
+• expected response latency
+h × dc + (1 − h) × do
+Forward proxy
+
+Quantify bandwidth benefit in the same way
+
+53 / 55
+
+Summary
+The Web
+
+Architecture
+
+Client-server vs peer-to-peer
+
+Naming
+
+Names, addresses, Web naming
+
+HTTP
+
+Request/response headers
+
+Session management
+
+Cookies and their side-effects
+
+Protocol performance
+
+Persistent connections, pipelining
+
+Caching
+
+Forward and reverse proxies
+
+54 / 55
+
+Additional Reading
+
+2.2
+
+55 / 55
+
+Naming and Content Distribution
+
+Ramesh Govindan
+September 7, 2024
+
+The Domain Name System
+
+1 / 46
+
+Host Naming
+
+Recap: URL
+• names and locates a web object
+• an important component: host-name
+protocol://host-name[:port]/directory-path/resource
+
+Next topic
+
+Uniform Resource Locator (URL)
+
+• how are hosts named?
+• host-names used for everything, not just
+Web
+
+2 / 46
+
+Internet Names and Addresses
+What they are
+
+Entities
+• hosts, routers, servers
+• other devices: smartphones,
+Internet-of-Things devices
+
+Addresses
+• labels for entities (also known as IP
+Addresses)
+• e.g., 141.212.113.143 (IPv4)
+• e.g., 2a00:1450:4016:80c::200e (IPv6)
+
+Names
+• e.g., cs.usc.edu
+• human-usable labels for machines
+• hierarchical schema
+
+The Domain Name System (DNS)
+• … maps machine name to address
+• A directory (binding) service
+
+• encodes entity’s network location
+
+3 / 46
+
+Internet Names and Addresses
+An Analogy
+
+Entities
+• humans
+• organizations
+
+Addresses
+• 941 Bloom Walk, Los Angeles, CA 90089
+• 1600 Pennsylvania Avenue NW, Washington
+DC 20500
+
+Names
+• Ramesh Govindan
+• University of Southern California
+• flat names
+
+The Domain Name System (DNS)
+• … maps machine name to address
+• A directory (binding) service
+
+4 / 46
+
+Internet Names and Addresses
+Naming Types and Hostname Schema
+
+Hierarchical Names
+• has a tree-like structure
+• e.g., cs.USC.edu
+• important for scaling
+
+DNS Schema
+• top-level domains (e.g., edu, gov, com)
+• multiple levels of sub-domains
+
+• postal addresses have hierarchy
+Top-level Domain
+
+Sub-domain
+
+Host name
+
+Flat Names
+• do not have structure
+
+www.
+
+cs.
+
+usc.
+
+edu
+
+• harder to scale
+
+5 / 46
+
+Internet Names and Addresses
+Why separate name from locator?
+
+Adds a Level of Indirection
+• means introducing names or references to
+objects
+• All problems in computer science can be
+solved by another level of indirection a
+
+Host Names
+• easier for humans to understand
+• hide changes to IP address (move/replace
+machine)
+a
+
+content
+
+www.nytimes.com
+
+function
+
+login.USC.edu
+
+organization
+
+cs.usc.edu
+
+service
+
+gmail.com
+
+physical location
+
+lsan.ca.frontiernet.net
+
+Hostnames can encode many attributes
+
+Butler Lampson
+
+6 / 46
+
+DNS: Beginnings
+
+When the Internet was Small
+
+Name-address mappings
+• in a hosts.txt file (archived here)
+• maintained by the Stanford Research
+Institute (SRI)
+• changes sent by email
+• sites downloaded periodically from SRI
+
+Hosts.txt from 1985
+7 / 46
+
+DNS: Beginnings
+
+When the Internet was Small
+
+As the Internet grew
+• high load on SRI servers
+• not unique names, inconsistent copies
+
+Aside: Centralized approaches
+• don’t scale
+• can be a single point of failure (SPOF)
+
+Hosts.txt from 1985
+8 / 46
+
+DNS Design
+
+Architecture
+• a distributed database of nameservers
+
+DNS today
+• handles trillions of requests per day
+• if it fails, you couldn’t use the Internet
+
+Aside: Distributed Designs
+• scale better
+• do not have a single point of failure
+• more complex, harder to manage
+
+9 / 46
+
+DNS Requirements
+
+Uniqueness
+
+No naming conflicts
+Large namespace
+
+Scalability
+
+High query rates
+Frequent updates
+
+Decentralized
+
+Org responsible for own updates
+
+Administration
+
+Runs own nameserver
+Highly available
+
+High Performance
+
+Fast lookups
+Eventually consistent
+
+10 / 46
+
+Components of the DNS
+
+Component
+
+Description
+
+record schema
+
+records contain information about entity
+
+query protocol
+
+host query nameservers for records
+
+nameserver
+
+where nameservers are
+
+organization
+
+and who runs them
+The DNS has three components
+
+11 / 46
+
+Nameserver Organization
+
+Hierarchical Organization
+• servers organized hierarchically
+• servers administered hierarchically
+• this is why DNS chose hierarchical
+naming!
+Nameserver Hierarchy
+
+12 / 46
+
+Nameserver Organization
+Server Hierarchy
+
+Top of hierarchy: Root servers
+• Location hardwired into other servers
+
+Next Level: Top-level domain (TLD) servers
+• .com, .edu, etc.
+• contain records for authoritative DNS
+servers
+
+Nameserver Hierarchy
+
+13 / 46
+
+Nameserver Organization
+Server Hierarchy
+
+Bottom Level: Authoritative DNS servers
+• stores DNS records for hosts
+• USC’s DNS server stores USC.edu records
+Nameserver Hierarchy
+
+14 / 46
+
+Nameserver Organization
+Administrative Hierarchy
+
+Top of hierarchy: Root servers
+• Usually, a non-profit coordination agency
+• e.g., Internet Corporation for Assigned
+Names and Numbers
+• Fun fact: USC-ISI runs some root servers
+
+Nameserver Hierarchy
+
+15 / 46
+
+Nameserver Organization
+Administrative Hierarchy
+
+Next Level: Top-level domain (TLD) servers
+• companies called domain registrars
+• e.g., Verisign
+
+Bottom Level: Authoritative DNS servers
+• each organization runs its own servers
+• USC runs the nameservers for *.USC.edu
+
+Nameserver Hierarchy
+
+16 / 46
+
+Nameserver Organization
+Hierarchical Lookup
+
+To find IP address of login.USC.edu
+• ask root name server for .edu nameserver
+• ask .edu nameserver for .USC nameserver
+• ask .USC nameserver for address of
+login.USC.edu
+Nameserver Hierarchy
+
+17 / 46
+
+Nameserver Organization
+Root Name Servers
+
+Most lookups
+• access root name servers
+• these can become a bottleneck
+
+Root servers
+• distributed across the globe, load spread
+across servers
+• run by different companies, for resilience
+• alleviate load by caching
+
+https://root-servers.org
+
+18 / 46
+
+Nameserver Organization
+Reliability
+
+Must withstand
+• failures and attacks
+• multiple root name servers for this reason
+
+Other reliability techniques
+• primary and secondary (backup)
+nameservers
+
+19 / 46
+
+Nameserver Organization
+What servers store
+
+Resource Record
+• unit of information in the DNS
+• facilitates lookup
+
+Authoritative Name Servers
+• store resource records for all DNS names in
+domain
+• e.g., USC’s name server for all *.USC.edu
+
+Nameserver Hierarchy
+
+20 / 46
+
+Nameserver Organization
+What servers store
+
+Other Servers
+• every server has a record for the root
+• root nameservers have records for top-level
+domains
+• … and so on
+
+Records distributed across nameservers
+
+Nameserver Hierarchy
+
+21 / 46
+
+Components of the DNS
+
+Component
+
+Description
+
+record schema
+
+records contain information about entity
+
+query protocol
+
+host query nameservers for records
+
+nameserver
+
+where nameservers are
+
+organization
+
+and who runs them
+The DNS has three components
+
+22 / 46
+
+Resource Records
+Record Format
+
+name, value, type, TTL
+
+Type = A: (→ Address)
+
+Type = CNAME: (→ Canonical Name)
+
+• name = hostname
+
+• name = alias for canonical (real) name
+
+• value = IP address
+
+• value = real name
+
+Type = NS: (→ Name Server)
+
+Type = MX: (→ Mail server)
+
+• name = domain
+
+• name = domain name
+
+• value = name of DNS server for domain
+
+• value = mail server for domain
+
+23 / 46
+
+Resource Records
+
+How to add them to the DNS?
+
+1 Register foobar.com at registrar
+• Provide registrar with names and IP addresses of your authoritative name server(s)
+
+2 Registrar inserts RR pairs into the .com TLD server:
+• (foobar.com, dns1.foobar.com, NS)
+• (dns1.foobar.com, 212.44.9.129, A)
+
+3 Store resource records in your server dns1.foobar.com
+• e.g., type A record for www.foobar.com
+• e.g., type MX record for foobar.com
+
+24 / 46
+
+Components of the DNS
+
+Component
+
+Description
+
+record schema
+
+records contain information about entity
+
+query protocol
+
+host query nameservers for records
+
+nameserver
+
+where nameservers are
+
+organization
+
+and who runs them
+The DNS has three components
+
+25 / 46
+
+DNS Protocol
+
+For getting resource records
+
+Query
+• contains (multiple) name and type
+
+Response
+• returns (multiple) value and TTL
+corresponding to query
+
+26 / 46
+
+Resource Records
+
+Obtaining them using DNS Protocol
+
+Using the command line
+• tool called dig
+• can be used to look up RRs
+
+Find a domain’s name server
+• dig USC.edu NS
+
+Get NS record
+
+27 / 46
+
+Resource Records
+Looking up an IP address
+
+Look up IP address
+• from authoritative name server
+• dig @ns6.USC.edu www.USC.edu
+
+Get A record
+
+28 / 46
+
+Resource Records
+How dig works
+
+Name resolution steps
+
+Terminology
+
+1
+
+Client calls getaddrinfo() (example code)
+
+2
+
+This invokes resolver
+
+3
+
+Resolver queries default name server
+
+client dig, but you can write your own
+resolver implements the DNS protocol,
+runs on host
+default name server every machine has one
+
+Details
+• client gets hostname from URL or command
+line
+• default name server configured on host
+manually or using DHCPa
+a
+
+Dynamic Host Configuration Protocol (quick intro)
+
+29 / 46
+
+Components of the DNS
+
+Component
+
+Description
+
+record schema
+
+records contain information about entity
+
+query protocol
+
+host query nameservers for records
+
+nameserver
+
+where nameservers are
+
+organization
+
+and who runs them
+The DNS has three components
+
+30 / 46
+
+Name Resolution
+
+Under the Hood: The Query Path
+
+31 / 46
+
+Name Resolution: Recursive
+Under the Hood: The Response Path
+
+32 / 46
+
+Name Resolution: Iterative
+A Different Request/Response Path
+
+33 / 46
+
+Name Resolution
+Caching
+
+Nameservers can cache responses
+• helps speed up response latency
+• DNS is a step in HTTP, latency is important
+• also helps reduce load
+
+What is cached where? Recursive
+• all nameservers on response path
+• … can cache www.nyu.edu
+• resolver (!), local DNS, root, TLD
+
+34 / 46
+
+Name Resolution
+Caching
+
+What is cached where? Iterative
+• local DNS can cache RRs for
+• root, TLD, NYU NS and www.nyu.edu
+
+Comparing the Two
+• recursive reduces load on DNS
+• iterative improves client latency
+
+35 / 46
+
+Name Resolution
+Caching: How it Works
+
+TTL in Response
+• Time-to-live specified how long response
+can be cached
+• Nameserver deletes cache after that time
+• Until then, it can respond with cached value
+
+TTL in Response
+
+36 / 46
+
+Name Resolution
+Reliability
+
+Every domain
+• has multiple name servers (replicas)
+• USC has 4
+
+Load balancing
+• responses contain these in different order
+• helps load balance
+
+Backup
+• if one doesn’t respond
+• timeout, and resend to other nameserver
+Multiple name servers
+
+37 / 46
+
+Content Distribution Networks
+
+38 / 46
+
+Making the Web Fast
+
+Optimizing connections
+• Persistent (latency)
+• Parallel/concurrent (bandwidth and latency)
+
+Request
+
+• Pipelined over the same connection
+(latency)
+
+Caching
+
+Response
+
+• Forward proxy: close to clients
+
+39 / 46
+
+Making the Web Faster
+
+Separate content creation from distribution
+
+Content creation and distribution
+• content creators (e.g., CNN, NY Times)
+• … also run distribution infrastructure (Web
+servers)
+• difficult to acquire technical expertise for
+this
+
+Content distribution networks
+• companies that distribute web content
+
+Request
+
+Response
+
+• content creators are their customers
+• most famous example: Akamai
+
+40 / 46
+
+Content Distribution
+How it works
+
+Creator
+• gives content (HTML, CSS, images)
+• … to content distributor (Akamai)
+
+Distributor
+• runs a content distribution network (CDN)
+
+Akamai CDN
+
+• of servers across globe
+• replicates content to servers
+
+Clients
+• access content from nearest replica
+
+Akamai
+content
+CNN
+
+41 / 46
+
+Content Distribution
+Why it Works
+
+Key Ideas
+• distributor specializes in fast, reliable
+content delivery
+• serves many customers, can provide
+cheaper delivery from economies of scale
+• replication spreads the load, enables fast
+access
+
+Akamai CDN
+
+Everyone benefits
+• creator: content delivered quickly, cheaply
+• clients: fast access to content
+• enterprises: replica reduces traffic costs
+
+Akamai
+content
+CNN
+
+42 / 46
+
+Akamai: Under the Hood
+
+New Akamai DNS names for each customer
+• e.g., a128.g.akamai.net for cnn.com
+
+Content creator modifies content
+• embedded URLs reference new domains
+(Akamaize content)
+• e.g.,
+http://www.cnn.com/image-of-the-day.gif
+becomes
+http://a128.g.akamai.net/image-of-the-day.gif
+
+Akamai server locations
+
+43 / 46
+
+Akamai: Under the Hood
+DNS Redirection
+
+New Akamai DNS names for each customer
+• e.g., a128.g.akamai.net for cnn.com
+• add a CNAME record for cnn.com
+
+Content creator modifies content
+• embedded URLs reference new domains
+(Akamaize content)
+• e.g.,
+http://www.cnn.com/image-of-the-day.gif
+becomes
+http://a128.g.akamai.net/image-of-the-day.gif
+
+Akamai server locations
+
+44 / 46
+
+Akamai: Under the Hood
+Direct clients to nearest replica
+
+Client browser
+• accesses CNN’s webpage
+• DNS sends cnn.com query to akamai.net
+(CNAME)
+
+B
+A
+
+Akamai nameserver
+• figures out client wants CNN content
+• Akamai’s mapping system figures out
+nearest replica
+• Akamai nameserver returns IP address of
+replica!
+
+A
+Akamai CDN
+
+B
+Akamai DNS
+
+Akamai
+content
+
+Dynamic name to address resolution
+
+CNN
+
+45 / 46
+
+Additional Reading
+
+2.4, 2.6
+
+46 / 46
+
+Video and Datacenters
+
+Ramesh Govindan
+September 7, 2024
+
+The Early Web
+
+Decentralized
+• websites of individuals, businesses
+
+Simple content
+• static HTML
+• images
+• minimal user input
+The Web: A Logical View
+
+1 / 35
+
+The Modern Web
+
+More centralized
+• Websites hosted on a few cloud computing platforms
+• … built using datacenters
+
+More complex content
+• video 60-70% of total Internet traffic
+• dynamically generated (using cloud resources) web pages
+
+2 / 35
+
+The Modern Web
+
+Video
+
+Datacenters
+
+3 / 35
+
+The Modern Web: Video
+Types of video with different demands
+
+1
+
+Video on-demand (e.g., YouTube, NetFlix)
+
+2
+
+Live video (e.g., Twitch)
+
+3
+
+Conferencing (e.g., Meet, Zoom)
+
+Our Focus: Video On-demand
+
+4 / 35
+
+Video Basics
+
+Conceptually
+• a sequence of images
+• captured at 30 frames per second
+
+Before storage or transmission
+• image sequence is compressed into a single video object
+• saves storage, network bandwidth
+
+We don’t study details of compression
+
+5 / 35
+
+Video On-Demand
+What it is
+
+Stored video
+• user-generated or professionally produced
+• short (few minutes) or long (hours)
+• always available (hence on-demand)
+
+Modern On-Demand Video Services
+
+6 / 35
+
+Video On-Demand
+Where to download from?
+
+Clients download video
+• from a CDN server!
+
+Videos can be large
+• faster from CDN server
+
+Internet
+
+• saves bandwidth on Internet
+• spreads load across servers
+
+YouTube
+
+7 / 35
+
+Video On-Demand
+How to download it? Take 1
+
+Use HTTP
+• download video object in one GET request
+• reuse a lot of existing infrastructure
+• … browsers, servers, CDNs, TCP
+
+Why this doesn’t work
+• files can be large (100s of MBs)
+• network quality can change, may take long
+to download
+• users may skip, pause, or quit early or not
+wait
+
+http://yt.com/cats.mp4
+
+8 / 35
+
+Video On-Demand
+
+How to download it? Take 2: Video Streaming
+
+Chunking
+• split video into chunks
+• each chunk 1-2 seconds long (30-60 frames)
+• stream next chunk while current chunk is
+playing
+
+Advantage
+• users don’t have to wait for entire video to
+download
+
+9 / 35
+
+Video Streaming
+
+But network delays are not constant
+
+What if
+• each chunk experiences different delay?
+• next chunk may not arrive before first
+finishes
+• result: stall
+
+One solution
+• buffer enough video
+• … before starting playback
+
+10 / 35
+
+DASH: Dynamic Adaptive HTTP-Based Streaming
+Adapts to available bandwidth
+
+Observation
+• video has different resolutions: 480p, 720p,
+1080p, 4K
+• these need different network bandwidth
+
+Key idea
+• encode chunks at different resolutions
+(quality)
+• client can download chunks based on
+available bandwidth
+• maximizes quality while avoiding stalls
+
+How DASH works
+
+11 / 35
+
+DASH: Dynamic Adaptive HTTP-Based Streaming
+How this works
+
+Content creator
+• chunks video
+• encodes chunks at different qualities
+• places chunks at different CDN servers
+• manifest file contains URLs for chunks at
+each quality level
+
+Client
+• downloads manifest
+• continuously estimates network bandwidth
+B from different CDN servers
+• downloads highest quality chunk that will fit
+within B
+
+How DASH works
+
+12 / 35
+
+The Modern Web
+
+Video
+
+Datacenters
+
+13 / 35
+
+The Modern Web: Dynamically Generated Content
+Web content generated on-the-fly
+
+Type
+
+Input
+
+Output
+
+search
+
+keywords
+
+ranked search results
+
+analytics
+
+query
+
+result
+
+genAI
+
+prompt
+
+summary
+
+Types of dynamically generated content
+
+14 / 35
+
+Search
+
+What it is and why it is hard
+
+Capability
+• full text search of entire Internet
+• user types in keywords
+• search engine returns ranked results
+
+Full text corpus
+• collected by crawling the Internet
+• too large to fit into a single machine
+
+Search example
+15 / 35
+
+Search
+
+How it works
+
+Key Idea
+• distribute corpus across many machines
+• search in parallel
+• combine the results
+
+Used often
+• for processing other large datasets
+• name for this pattern: partition-aggregate
+
+Need many computers!
+How search works
+
+16 / 35
+
+Analytics
+
+Querying large datasets
+
+Query examples
+• count people in company above 30
+• get word frequency of a large piece of text
+
+Map-Reduce
+• distributed computation pattern for such
+queries
+• map phase gets counts from text splits
+• reduce combines counts from map outputs
+Example of map-reduce
+
+17 / 35
+
+Analytics
+
+How this works
+
+Mappers
+• machines across which text is split
+• each runs map computation on split
+
+Reducers
+• machines that receive map output
+• combine counts to produce total counts
+Map-reduce computation
+
+18 / 35
+
+Supporting the Modern Web
+
+Need
+• lots of storage for video
+• lots of compute for dynamic content
+
+Datacenter
+• a warehouse full of computers
+• much web content served out of
+datacenters
+Source: Google
+
+19 / 35
+
+Datacenters
+Physical View
+
+Rows of
+• racks connected by a network
+
+Rack
+• contains 30-40 servers
+• a switch at the top of the rack
+Source: Google
+
+20 / 35
+
+Datacenters
+
+Closer look at rack rows
+
+On a rack
+• servers stacked on top of each other
+• connected by network cables to switch
+
+Between racks
+• bundles of cables connecting
+• … datacenter network switches
+Source: Facebook
+
+21 / 35
+
+By the Numbers
+
+1M servers/site [Microsoft/Amazon/Google]
+$1B to build one site [Facebook]
+$20M/month/site operational costs [Microsoft]
+Hardware spending $177 billion in 2017 [Gartner]
+O(10-100) sites
+
+22 / 35
+
+Network Requirements
+
+Scale
+• Designs that connect 1M servers
+
+Reliability
+• Tolerate frequent failure
+
+Reduce cost
+• buy commodity technology
+
+Increase network utilization
+• Internet utilization around 30-40%
+
+• Large number of (low cost) components
+
+Multi-tenancy
+• Support multiple tenants (cloud customers)
+
+23 / 35
+
+Datacenters
+The Logical View
+
+Servers
+• on rack connect to Top-of-Rack (ToR) switch
+
+ToR switches
+• connect to aggregation switches
+
+Aggregation
+• switches interconnected by core switches
+• core switches may connect to Internet
+
+24 / 35
+
+Datacenters
+
+How Services Work?
+
+1
+2
+
+Users send request to server
+
+Data center Network
+
+Server contacts other workers
+(partition-aggregate)
+
+3
+
+Workers respond with answers
+
+4
+
+Server aggregates response, returns to user
+
+User
+
+...
+
+25 / 35
+
+Datacenter Traffic
+Traffic Types
+
+Two kinds of traffic
+north-south Internet to datacenter
+east-west within datacenter
+
+80-90% traﬀic is east-west
+
+26 / 35
+
+Datacenter Traffic
+
+East-west traffic characteristics
+
+Two key characteristics
+• Most flows (connections) are small
+• Most bytes come from large flows
+
+Applications want
+• High bandwidth (large flows)
+• Low latency (small flows)
+
+27 / 35
+
+A High-Bandwidth Datacenter Network
+
+Ideal
+• Each server can talk to any other server
+• … at its full access link rate
+
+Conceptual view
+• Datacenter network as one giant switch
+
+28 / 35
+
+A High-Bandwidth Datacenter Network
+Can you really build one giant switch?
+
+Giant switch
+• Would require a 10 Pbits/sec switch! (10^15
+bps)
+• 1M ports (one port/server)
+• 10Gbps per port
+
+These don’t exist, would be expensive!
+
+29 / 35
+
+A High-Bandwidth Datacenter Network
+A better idea
+
+Giant switch
+• Built out of many smaller switches
+• Interconnected with each other
+• Gives the illusion of a giant switch
+
+30 / 35
+
+A High-Bandwidth Datacenter Network
+But how do we provide this illusion?
+
+Bisection bandwidth
+• Partition a network into two equal parts
+• Minimum bandwidth between the partitions
+
+Full bisection bandwidth
+• in N node network, if bisection bandwidth
+• … N/2 times the bandwidth of a single link
+• any two nodes can communicate at full
+speed
+
+The illusion is complete!
+
+31 / 35
+
+Achieving Full Bisection Bandwidth
+Take 1: Scaling up
+
+Scale up
+• make links fatter toward the core of the
+network
+
+Expensive
+• need large routers, switches in the core
+• may not be commercially available
+
+32 / 35
+
+Achieving Full Bisection Bandwidth
+Take 2: Scale out
+
+Clos: A Multi-stage network
+• k pods, where each pod has two layers of
+k/2 switches
+• k/2 ports up and k/2 down
+
+• All links have the same b/w
+• At most k3 /4 machines
+
+Example
+• k = 4, 16 machines
+• k = 48, 27648 machines
+
+33 / 35
+
+Achieving Full Bisection Bandwidth
+Properties of Clos
+
+All switches
+• of the same kind (same number of ports)
+• can get bulk discounts
+
+Network
+• has multiple paths between any two nodes
+• routing must make use of this (we will see
+later)
+
+Growth
+• to support more servers
+• add more pods (hence scale out)
+
+34 / 35
+
+Additional Reading
+
+2.6, 6.6
+
+35 / 35
+
+

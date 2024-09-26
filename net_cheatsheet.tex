@@ -1,0 +1,168 @@
+\documentclass[9pt]{extarticle}
+\usepackage[margin=0.3in]{geometry}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+\pagestyle{empty}
+\definecolor{sectioncolor}{HTML}{003366}
+\definecolor{subsectioncolor}{HTML}{006699}
+\definecolor{highlight}{HTML}{990000}
+\begin{document}
+\small
+\begin{multicols*}{3}
+% --------------------------------------------------------------------
+% Network Layers
+% --------------------------------------------------------------------
+{\color{sectioncolor}\section*{\centering Network Layers}}
+{\color{subsectioncolor}\subsection*{Internet Protocol Stack (5 Layers)}}
+\begin{enumerate}
+\item \textbf{Application} (HTTP, DNS, SMTP)
+\item \textbf{Transport} (TCP, UDP)
+\item \textbf{Network} (IP)
+\item \textbf{Link} (Ethernet, WiFi)
+\item \textbf{Physical} (Cables, signals)
+\end{enumerate}
+{\color{subsectioncolor}\subsection*{Encapsulation}}
+\[
+\text{\color{highlight}{Data}} \rightarrow \text{\color{highlight}{Segment}} \rightarrow \text{\color{highlight}{Packet}} \rightarrow \text{\color{highlight}{Frame}} \rightarrow \text{\color{highlight}{Bits}}
+\]
+% --------------------------------------------------------------------
+% Key Protocols
+% --------------------------------------------------------------------
+{\color{sectioncolor}\section*{\centering Key Protocols}}
+\textbf{HTTP}
+\begin{itemize}
+\item Request-response protocol
+\item Methods: GET, POST, HEAD, PUT, DELETE
+\item Status codes: 200 OK, 404 Not Found, etc.
+\end{itemize}
+\textbf{DNS}
+\begin{itemize}
+\item Hierarchical: Root, TLD, Authoritative servers
+\item Resource Records: A, NS, CNAME, MX
+\item Caching for performance
+\end{itemize}
+\textbf{TCP}
+\begin{itemize}
+\item Reliable, ordered, connection-oriented
+\item Flow control, congestion control
+\item Three-way handshake: SYN, SYN-ACK, ACK
+\end{itemize}
+\textbf{UDP}
+\begin{itemize}
+\item Unreliable, unordered, connectionless
+\item Lightweight, low latency
+\end{itemize}
+% --------------------------------------------------------------------
+% Packet vs. Circuit Switching
+% --------------------------------------------------------------------
+{\color{sectioncolor}\section*{\centering Packet vs. Circuit Switching}}
+{\color{subsectioncolor}\subsection*{Packet Switching}}
+\begin{itemize}
+\item Store-and-forward transmission
+\item Statistical multiplexing
+\item No call setup required
+\end{itemize}
+{\color{subsectioncolor}\subsection*{Circuit Switching}}
+\begin{itemize}
+\item Dedicated end-to-end resources
+\item Guaranteed performance
+\item Inefficient for bursty data
+\end{itemize}
+% --------------------------------------------------------------------
+% Performance Metrics
+% --------------------------------------------------------------------
+{\color{sectioncolor}\section*{\centering Performance Metrics}}
+{\color{subsectioncolor}\subsection*{Delays}}
+\begin{itemize}
+\item \textbf{Processing (\( d_{\text{proc}} \))}
+\item \textbf{Queuing (\( d_{\text{queue}} \))}
+\item \textbf{Transmission (\( d_{\text{trans}} = \frac{L}{R} \))}
+\item \textbf{Propagation (\( d_{\text{prop}} = \frac{d}{s} \))}
+\end{itemize}
+\textbf{Total Delay:}
+\[
+d_{\text{total}} = d_{\text{proc}} + d_{\text{queue}} + d_{\text{trans}} + d_{\text{prop}}
+\]
+\textbf{Throughput:}
+\[
+\text{Throughput} = \min\left\{ R_s, R_c, \dfrac{R}{N} \right\}
+\]
+Where \( R_s \) is server rate, \( R_c \) is client rate, \( R \) is bottleneck link rate, and \( N \) is number of flows.
+
+\textbf{Packet Loss:} Occurs when router buffers overflow
+% --------------------------------------------------------------------
+% Web Technologies & CDNs
+% --------------------------------------------------------------------
+{\color{sectioncolor}\section*{\centering Web Technologies \& CDNs}}
+{\color{subsectioncolor}\subsection*{Web Technologies}}
+\begin{itemize}
+\item \textbf{HTTP/1.1}: Persistent connections
+\item \textbf{HTTP/2}: Multiplexing, server push
+\item \textbf{HTTPS}: HTTP over TLS/SSL
+\item \textbf{Cookies}: Client-side state management
+\end{itemize}
+{\color{subsectioncolor}\subsection*{CDNs (Content Delivery Networks)}}
+\begin{itemize}
+\item Replicate content on many servers
+\item DNS-based redirection
+\item Akamai example: uses DNS hierarchy
+\end{itemize}
+% --------------------------------------------------------------------
+% Video Streaming
+% --------------------------------------------------------------------
+{\color{sectioncolor}\section*{\centering Video Streaming}}
+{\color{subsectioncolor}\subsection*{DASH (Dynamic Adaptive Streaming over HTTP)}}
+\begin{itemize}
+\item Client determines:
+\begin{itemize}
+\item When to request chunk
+\item What encoding rate to request
+\item Where to request chunk from
+\end{itemize}
+\item Server:
+\begin{itemize}
+\item Divides video into chunks
+\item Encodes each chunk at multiple rates
+\item Sends manifest file to client
+\end{itemize}
+\end{itemize}
+{\color{subsectioncolor}\subsection*{Content Distribution Networks (CDNs)}}
+\begin{itemize}
+\item Netflix: Own CDN (Open Connect)
+\item YouTube: Uses Google's CDN
+\end{itemize}
+% --------------------------------------------------------------------
+% Additional Key Points
+% --------------------------------------------------------------------
+{\color{sectioncolor}\section*{\centering Additional Key Points}}
+\textbf{DNS Resolution Process:}
+\begin{enumerate}
+\item Local DNS cache
+\item Recursive query to local DNS server
+\item Root DNS server
+\item TLD DNS server
+\item Authoritative DNS server
+\end{enumerate}
+\textbf{TCP Congestion Control:}
+\begin{itemize}
+\item Slow start
+\item Congestion avoidance
+\item Fast recovery
+\end{itemize}
+\textbf{Network Address Translation (NAT):}
+\begin{itemize}
+\item Allows multiple devices to share one public IP
+\item Modifies IP addresses in packet headers
+\end{itemize}
+\textbf{Socket Programming:}
+\begin{itemize}
+\item API for network communication
+\item TCP sockets: connection-oriented
+\item UDP sockets: connectionless
+\end{itemize}
+\end{multicols*}
+\end{document}
