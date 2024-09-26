@@ -12,153 +12,203 @@
 % Network Architecture and Layers
 % --------------------------------------------------------------------
 \section*{Network Architecture and Layers}
-\begin{multicols}{2}
-\textbf{Layer Model:}
+
+\textbf{OSI Model Layers:}
+\begin{enumerate}
+    \item \textbf{Physical Layer:} Concerns the transmission and reception of unstructured raw data over a physical medium. It includes hardware like cables, switches, and radio frequencies.
+    \item \textbf{Data Link Layer:} Provides node-to-node data transfer—a link between two directly connected nodes. It handles error detection, frame synchronization, and flow control.
+    \item \textbf{Network Layer:} Manages device addressing, tracks the location of devices on the network, and determines the best way to move data. Routers operate at this layer.
+    \item \textbf{Transport Layer:} Ensures complete data transfer with error recovery and flow control. Protocols like TCP and UDP function here.
+    \item \textbf{Session Layer:} Controls dialogues (sessions) between computers. It establishes, manages, and terminates the connections.
+    \item \textbf{Presentation Layer:} Translates data between the application layer and the network format. It handles data encryption and decryption.
+    \item \textbf{Application Layer:} Provides network services to the end-user applications. Protocols include HTTP, FTP, and SMTP.
+\end{enumerate}
+
+\textbf{Encapsulation Process:}
 \begin{itemize}
-    \item Application: End-user services (e.g., HTTP, FTP)
-    \item Transport: Process-to-process data transfer (e.g., TCP, UDP)
-    \item Network: Routing of datagrams (e.g., IP)
-    \item Link: Data transfer between adjacent nodes (e.g., Ethernet, WiFi)
-    \item Physical: Transmission of raw bits (e.g., cabling, RF)
+    \item Data is encapsulated with protocol headers as it moves down the layers.
+    \item Each layer adds its own header (and sometimes trailer) to the data from the layer above.
 \end{itemize}
 
-\textbf{Encapsulation:}
-\begin{verbatim}
-Application Data (M)
-    Transport Header (H_t)
-    Network Header (H_n)
-    Link Header (H_l)
-\end{verbatim}
-
-\columnbreak
-
-\textbf{Layer Responsibilities:}
-\begin{itemize}
-    \item \textbf{Application:} Network process to application. (e.g., HTTP, DNS)
-    \item \textbf{Transport:} Reliable/unreliable data transfer. (e.g., TCP, UDP).
-    \item \textbf{Network:} Logical addressing, routing. (e.g., IP).
-    \item \textbf{Link:} Physical addressing, frame transmission. (e.g., Ethernet).
-    \item \textbf{Physical:} Media, signal, and binary transmission.
-\end{itemize}
-\end{multicols}
+\textbf{Encapsulation Steps:}
+\[
+\begin{aligned}
+\text{Application Data} & \rightarrow \text{Segment (Transport Header added)} \\
+& \rightarrow \text{Packet (Network Header added)} \\
+& \rightarrow \text{Frame (Data Link Header and Trailer added)} \\
+& \rightarrow \text{Bits (Physical Layer)}
+\end{aligned}
+\]
 
 % --------------------------------------------------------------------
 % Key Protocols (HTTP, DNS, TCP/UDP, IP)
 % --------------------------------------------------------------------
 \section*{Key Protocols}
-\textbf{HTTP:} HyperText Transfer Protocol; used for transmitting web pages.
 
-\textbf{DNS:} Domain Name System; translates domain names to IP addresses.
-
-\textbf{TCP/UDP:}
+\textbf{HTTP (HyperText Transfer Protocol):}
 \begin{itemize}
-    \item \textbf{TCP:} Connection-oriented, reliable, flow control, congestion control.
-    \item \textbf{UDP:} Connectionless, unreliable, low overhead.
+    \item Foundation of data communication for the World Wide Web.
+    \item Stateless protocol operating at the application layer.
+    \item Uses methods like GET and POST to request and submit data.
 \end{itemize}
 
-\textbf{IP:} Internet Protocol; handles routing of packets between source and destination.
-
-\begin{multicols}{2}
-\textbf{TCP Services:}
+\textbf{DNS (Domain Name System):}
 \begin{itemize}
-    \item Connection-Oriented: Handshake; prepares for data exchange.
-    \item Reliable Data Transfer: Ensures error-free, in-order delivery.
+    \item Translates human-friendly domain names to IP addresses.
+    \item Hierarchical and decentralized naming system.
+    \item Utilizes UDP port 53 for queries.
 \end{itemize}
 
-\textbf{UDP Services:}
+\textbf{TCP (Transmission Control Protocol):}
 \begin{itemize}
-    \item Connectionless: No handshake before data transfer.
-    \item Unreliable: No guarantees on message delivery.
+    \item Ensures reliable, ordered, and error-checked delivery of data.
+    \item Connection-oriented protocol with congestion control and flow control.
+    \item Uses a three-way handshake to establish a connection.
 \end{itemize}
-\end{multicols}
+
+\textbf{UDP (User Datagram Protocol):}
+\begin{itemize}
+    \item Provides a connectionless datagram service.
+    \item Offers minimal error checking and no flow control.
+    \item Suitable for applications that require speed over reliability (e.g., streaming).
+\end{itemize}
+
+\textbf{IP (Internet Protocol):}
+\begin{itemize}
+    \item Responsible for routing packets across network boundaries.
+    \item Defines the addressing methods and structures of datagrams.
+    \item IPv4 uses 32-bit addresses; IPv6 uses 128-bit addresses for expansion.
+\end{itemize}
 
 % --------------------------------------------------------------------
 % Packet vs. Circuit Switching
 % --------------------------------------------------------------------
 \section*{Packet vs. Circuit Switching}
+
 \textbf{Packet Switching:}
 \begin{itemize}
-    \item Data sent in packets.
-    \item Each packet routed independently.
-    \item Pros: Efficient, shared links.
-    \item Cons: Variable delays.
+    \item Data is broken into packets, each of which may take different paths to the destination.
+    \item Network resources are used on-demand.
+    \item Advantages: Efficient use of bandwidth, robustness.
+    \item Disadvantages: Possible delays due to congestion, packet loss.
 \end{itemize}
 
 \textbf{Circuit Switching:}
 \begin{itemize}
-    \item Dedicated path for duration of the connection.
-    \item Pros: Consistent E2E delay.
-    \item Cons: Inefficient for bursty traffic.
+    \item A dedicated communication path is established between two nodes.
+    \item Resources are reserved for the entire duration of the connection.
+    \item Advantages: Continuous transmission with minimal delay.
+    \item Disadvantages: Inefficient utilization of network resources.
 \end{itemize}
 
-\textbf{Diagrams:}
-\begin{verbatim}
-Packet:
-    [Host] -- [Router] -- [Router] -- [Host]
-Circuit:
-    [Host] == [Router] == [Router] == [Host] (dedicated)
-\end{verbatim}
+\textbf{Visual Representation:}
+\begin{itemize}
+    \item \textbf{Packet Switching Diagram:}
+    \[
+    \text{[Host]} \rightarrow \text{[Router]} \rightarrow \text{[Router]} \rightarrow \text{[Host]}
+    \]
+    \item \textbf{Circuit Switching Diagram:}
+    \[
+    \text{[Host]} \leftrightarrow \text{[Router]} \leftrightarrow \text{[Router]} \leftrightarrow \text{[Host]}
+    \]
+\end{itemize}
 
 % --------------------------------------------------------------------
 % Performance Metrics (Delay, Throughput, Packet Loss)
 % --------------------------------------------------------------------
 \section*{Performance Metrics}
-Types of Delays:
-\begin{itemize}
-    \item Processing Delay: Time for router to process the packet header.
-    \item Queuing Delay: Time waiting at the queue for transmission.
-    \item Transmission Delay: \( L/R \) (packet length / transmission rate).
-    \item Propagation Delay: \( d/s \) (distance / propagation speed).
-\end{itemize}
 
-\textbf{Throughput:} Rate at which data is successfully transferred (\( \text{bits/sec} \)).
+\textbf{Types of Delays:}
+\begin{enumerate}
+    \item \textbf{Processing Delay (\( d_{\text{proc}} \)):} Time routers take to process the packet header.
+    \item \textbf{Queuing Delay (\( d_{\text{queue}} \)):} Time a packet spends in routing queues.
+    \item \textbf{Transmission Delay (\( d_{\text{trans}} \)):} Time to push all packet bits onto the link.
+    
+    \[
+    d_{\text{trans}} = \frac{\text{Packet Length (bits)}}{\text{Transmission Rate (bps)}}
+    \]
+    \item \textbf{Propagation Delay (\( d_{\text{prop}} \)):} Time for a signal to propagate through the medium.
 
-\textbf{Packet Loss:} Packets that don't reach the destination.
+    \[
+    d_{\text{prop}} = \frac{\text{Distance (meters)}}{\text{Propagation Speed (meters/sec)}}
+    \]
+\end{enumerate}
 
-\textbf{Formula:}
+\textbf{Total Delay:}
 \[
 \text{Total Delay} = d_{\text{proc}} + d_{\text{queue}} + d_{\text{trans}} + d_{\text{prop}}
 \]
+
+\textbf{Throughput:}
+\begin{itemize}
+    \item Rate at which bits are transferred between sender and receiver.
+    \item \textbf{Instantaneous Throughput:} Measured at a given instant.
+    \item \textbf{Average Throughput:} Measured over a longer period.
+\end{itemize}
+
+\textbf{Packet Loss:}
+\begin{itemize}
+    \item Occurs when network congestion leads to packets being dropped.
+    \item Affects the quality of communication, requiring retransmissions.
+\end{itemize}
 
 % --------------------------------------------------------------------
 % Web Technologies and CDNs
 % --------------------------------------------------------------------
 \section*{Web Technologies and CDNs}
+
 \textbf{Web Technologies:}
 \begin{itemize}
-    \item HTTP(S), HTML, CSS, JavaScript.
-    \item Client-server model.
+    \item \textbf{HTML (HyperText Markup Language):} Standard language for creating web pages.
+    \item \textbf{CSS (Cascading Style Sheets):} Used to style and layout web pages.
+    \item \textbf{JavaScript:} Scripting language for creating dynamic web content.
+    \item \textbf{HTTPS:} Secure version of HTTP using SSL/TLS encryption.
+    \item \textbf{Client-Server Model:} Clients request resources/services from servers.
 \end{itemize}
 
-\textbf{CDN:} Content Delivery Network; distributes content to servers closer to end-users to reduce latency.
+\textbf{Content Delivery Networks (CDNs):}
+\begin{itemize}
+    \item Networks of distributed servers that deliver web content based on user location.
+    \item Aim to reduce latency and improve page load times.
+    \item Provide redundancy and reduce bandwidth costs.
+\end{itemize}
 
-\textbf{Diagram:}
-\begin{verbatim}
-[Client] -- [Edge Server]
-  \/ CDN \/       ||
-[Data Center] -- [Origin Server]
-\end{verbatim}
+\textbf{CDN Diagram:}
+% \begin{center}
+% \includegraphics[width=0.5\textwidth]{cdn_diagram.png}
+% \end{center}
 
 % --------------------------------------------------------------------
 % Video Streaming Concepts
 % --------------------------------------------------------------------
 \section*{Video Streaming Concepts}
-\textbf{Streaming Types:}
+
+\textbf{Types of Streaming:}
 \begin{itemize}
-    \item \textbf{Live:} Real-time broadcasting.
-    \item \textbf{On-Demand:} Pre-recorded content.
+    \item \textbf{Live Streaming:} Broadcasting events in real-time.
+    \item \textbf{On-Demand Streaming:} Accessing pre-recorded content anytime.
 \end{itemize}
 
 \textbf{Important Metrics:}
 \begin{itemize}
-    \item Bandwidth
-    \item Buffering
-    \item Bitrate (e.g., 360p, 720p, 1080p)
+    \item \textbf{Bandwidth:} Capacity of data transfer in a network.
+    \item \textbf{Buffering:} Temporary storage to ensure smooth playback.
+    \item \textbf{Bitrate:} Number of bits processed per unit of time, affecting video quality.
 \end{itemize}
 
-\textbf{Example: Bitrate Calculation}
+\textbf{Bitrate Calculation:}
 \[
-\text{Total size} = \text{Bitrate} \ \times \ \text{Duration}
+\text{Total Size (bits)} = \text{Bitrate (bps)} \times \text{Duration (sec)}
 \]
-% (e.g., \( 2 \, \text{Mbps} \times 60 \, \text{sec} = 15 \, \text{MB})
+
+\textbf{Example Calculation:}
+\[
+\begin{aligned}
+\text{Bitrate} &= 2 \text{ Mbps} = 2 \times 10^6 \text{ bps} \\
+\text{Duration} &= 60 \text{ sec} \\
+\text{Total Size} &= 2 \times 10^6 \times 60 = 120 \times 10^6 \text{ bits} \\
+&= 15 \text{ MB (since } 8 \times 10^6 \text{ bits} = 1 \text{ MB)}
+\end{aligned}
+\]
+
 \end{document}
