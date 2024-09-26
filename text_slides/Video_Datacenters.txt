@@ -1,0 +1,544 @@
+Video and Datacenters
+
+Ramesh Govindan
+September 7, 2024
+
+The Early Web
+
+Decentralized
+• websites of individuals, businesses
+
+Simple content
+• static HTML
+• images
+• minimal user input
+The Web: A Logical View
+
+1 / 35
+
+The Modern Web
+
+More centralized
+• Websites hosted on a few cloud computing platforms
+• … built using datacenters
+
+More complex content
+• video 60-70% of total Internet traffic
+• dynamically generated (using cloud resources) web pages
+
+2 / 35
+
+The Modern Web
+
+Video
+
+Datacenters
+
+3 / 35
+
+The Modern Web: Video
+Types of video with different demands
+
+1
+
+Video on-demand (e.g., YouTube, NetFlix)
+
+2
+
+Live video (e.g., Twitch)
+
+3
+
+Conferencing (e.g., Meet, Zoom)
+
+Our Focus: Video On-demand
+
+4 / 35
+
+Video Basics
+
+Conceptually
+• a sequence of images
+• captured at 30 frames per second
+
+Before storage or transmission
+• image sequence is compressed into a single video object
+• saves storage, network bandwidth
+
+We don’t study details of compression
+
+5 / 35
+
+Video On-Demand
+What it is
+
+Stored video
+• user-generated or professionally produced
+• short (few minutes) or long (hours)
+• always available (hence on-demand)
+
+Modern On-Demand Video Services
+
+6 / 35
+
+Video On-Demand
+Where to download from?
+
+Clients download video
+• from a CDN server!
+
+Videos can be large
+• faster from CDN server
+
+Internet
+
+• saves bandwidth on Internet
+• spreads load across servers
+
+YouTube
+
+7 / 35
+
+Video On-Demand
+How to download it? Take 1
+
+Use HTTP
+• download video object in one GET request
+• reuse a lot of existing infrastructure
+• … browsers, servers, CDNs, TCP
+
+Why this doesn’t work
+• files can be large (100s of MBs)
+• network quality can change, may take long
+to download
+• users may skip, pause, or quit early or not
+wait
+
+http://yt.com/cats.mp4
+
+8 / 35
+
+Video On-Demand
+
+How to download it? Take 2: Video Streaming
+
+Chunking
+• split video into chunks
+• each chunk 1-2 seconds long (30-60 frames)
+• stream next chunk while current chunk is
+playing
+
+Advantage
+• users don’t have to wait for entire video to
+download
+
+9 / 35
+
+Video Streaming
+
+But network delays are not constant
+
+What if
+• each chunk experiences different delay?
+• next chunk may not arrive before first
+finishes
+• result: stall
+
+One solution
+• buffer enough video
+• … before starting playback
+
+10 / 35
+
+DASH: Dynamic Adaptive HTTP-Based Streaming
+Adapts to available bandwidth
+
+Observation
+• video has different resolutions: 480p, 720p,
+1080p, 4K
+• these need different network bandwidth
+
+Key idea
+• encode chunks at different resolutions
+(quality)
+• client can download chunks based on
+available bandwidth
+• maximizes quality while avoiding stalls
+
+How DASH works
+
+11 / 35
+
+DASH: Dynamic Adaptive HTTP-Based Streaming
+How this works
+
+Content creator
+• chunks video
+• encodes chunks at different qualities
+• places chunks at different CDN servers
+• manifest file contains URLs for chunks at
+each quality level
+
+Client
+• downloads manifest
+• continuously estimates network bandwidth
+B from different CDN servers
+• downloads highest quality chunk that will fit
+within B
+
+How DASH works
+
+12 / 35
+
+The Modern Web
+
+Video
+
+Datacenters
+
+13 / 35
+
+The Modern Web: Dynamically Generated Content
+Web content generated on-the-fly
+
+Type
+
+Input
+
+Output
+
+search
+
+keywords
+
+ranked search results
+
+analytics
+
+query
+
+result
+
+genAI
+
+prompt
+
+summary
+
+Types of dynamically generated content
+
+14 / 35
+
+Search
+
+What it is and why it is hard
+
+Capability
+• full text search of entire Internet
+• user types in keywords
+• search engine returns ranked results
+
+Full text corpus
+• collected by crawling the Internet
+• too large to fit into a single machine
+
+Search example
+15 / 35
+
+Search
+
+How it works
+
+Key Idea
+• distribute corpus across many machines
+• search in parallel
+• combine the results
+
+Used often
+• for processing other large datasets
+• name for this pattern: partition-aggregate
+
+Need many computers!
+How search works
+
+16 / 35
+
+Analytics
+
+Querying large datasets
+
+Query examples
+• count people in company above 30
+• get word frequency of a large piece of text
+
+Map-Reduce
+• distributed computation pattern for such
+queries
+• map phase gets counts from text splits
+• reduce combines counts from map outputs
+Example of map-reduce
+
+17 / 35
+
+Analytics
+
+How this works
+
+Mappers
+• machines across which text is split
+• each runs map computation on split
+
+Reducers
+• machines that receive map output
+• combine counts to produce total counts
+Map-reduce computation
+
+18 / 35
+
+Supporting the Modern Web
+
+Need
+• lots of storage for video
+• lots of compute for dynamic content
+
+Datacenter
+• a warehouse full of computers
+• much web content served out of
+datacenters
+Source: Google
+
+19 / 35
+
+Datacenters
+Physical View
+
+Rows of
+• racks connected by a network
+
+Rack
+• contains 30-40 servers
+• a switch at the top of the rack
+Source: Google
+
+20 / 35
+
+Datacenters
+
+Closer look at rack rows
+
+On a rack
+• servers stacked on top of each other
+• connected by network cables to switch
+
+Between racks
+• bundles of cables connecting
+• … datacenter network switches
+Source: Facebook
+
+21 / 35
+
+By the Numbers
+
+1M servers/site [Microsoft/Amazon/Google]
+$1B to build one site [Facebook]
+$20M/month/site operational costs [Microsoft]
+Hardware spending $177 billion in 2017 [Gartner]
+O(10-100) sites
+
+22 / 35
+
+Network Requirements
+
+Scale
+• Designs that connect 1M servers
+
+Reliability
+• Tolerate frequent failure
+
+Reduce cost
+• buy commodity technology
+
+Increase network utilization
+• Internet utilization around 30-40%
+
+• Large number of (low cost) components
+
+Multi-tenancy
+• Support multiple tenants (cloud customers)
+
+23 / 35
+
+Datacenters
+The Logical View
+
+Servers
+• on rack connect to Top-of-Rack (ToR) switch
+
+ToR switches
+• connect to aggregation switches
+
+Aggregation
+• switches interconnected by core switches
+• core switches may connect to Internet
+
+24 / 35
+
+Datacenters
+
+How Services Work?
+
+1
+2
+
+Users send request to server
+
+Data center Network
+
+Server contacts other workers
+(partition-aggregate)
+
+3
+
+Workers respond with answers
+
+4
+
+Server aggregates response, returns to user
+
+User
+
+...
+
+25 / 35
+
+Datacenter Traffic
+Traffic Types
+
+Two kinds of traffic
+north-south Internet to datacenter
+east-west within datacenter
+
+80-90% traﬀic is east-west
+
+26 / 35
+
+Datacenter Traffic
+
+East-west traffic characteristics
+
+Two key characteristics
+• Most flows (connections) are small
+• Most bytes come from large flows
+
+Applications want
+• High bandwidth (large flows)
+• Low latency (small flows)
+
+27 / 35
+
+A High-Bandwidth Datacenter Network
+
+Ideal
+• Each server can talk to any other server
+• … at its full access link rate
+
+Conceptual view
+• Datacenter network as one giant switch
+
+28 / 35
+
+A High-Bandwidth Datacenter Network
+Can you really build one giant switch?
+
+Giant switch
+• Would require a 10 Pbits/sec switch! (10^15
+bps)
+• 1M ports (one port/server)
+• 10Gbps per port
+
+These don’t exist, would be expensive!
+
+29 / 35
+
+A High-Bandwidth Datacenter Network
+A better idea
+
+Giant switch
+• Built out of many smaller switches
+• Interconnected with each other
+• Gives the illusion of a giant switch
+
+30 / 35
+
+A High-Bandwidth Datacenter Network
+But how do we provide this illusion?
+
+Bisection bandwidth
+• Partition a network into two equal parts
+• Minimum bandwidth between the partitions
+
+Full bisection bandwidth
+• in N node network, if bisection bandwidth
+• … N/2 times the bandwidth of a single link
+• any two nodes can communicate at full
+speed
+
+The illusion is complete!
+
+31 / 35
+
+Achieving Full Bisection Bandwidth
+Take 1: Scaling up
+
+Scale up
+• make links fatter toward the core of the
+network
+
+Expensive
+• need large routers, switches in the core
+• may not be commercially available
+
+32 / 35
+
+Achieving Full Bisection Bandwidth
+Take 2: Scale out
+
+Clos: A Multi-stage network
+• k pods, where each pod has two layers of
+k/2 switches
+• k/2 ports up and k/2 down
+
+• All links have the same b/w
+• At most k3 /4 machines
+
+Example
+• k = 4, 16 machines
+• k = 48, 27648 machines
+
+33 / 35
+
+Achieving Full Bisection Bandwidth
+Properties of Clos
+
+All switches
+• of the same kind (same number of ports)
+• can get bulk discounts
+
+Network
+• has multiple paths between any two nodes
+• routing must make use of this (we will see
+later)
+
+Growth
+• to support more servers
+• add more pods (hence scale out)
+
+34 / 35
+
+Additional Reading
+
+2.6, 6.6
+
+35 / 35
+
+

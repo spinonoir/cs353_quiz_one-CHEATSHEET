@@ -1,0 +1,808 @@
+Introduction to Networking
+
+Ramesh Govindan
+August 26, 2024
+
+Acknowledgements
+
+All materials for this course adapted from
+courses developed by Morley Mao, Mosharaf
+Chowdhury, Aditya Akella, Sugih Jamin, Philip
+Levis, Sylvia Ratnasamy, Peter Steenkiste, and
+many other colleagues.
+
+Many figures and slides borrowed from Jim
+Kurose and Keith Ross’s textbook and slides.
+
+Recommended text book
+
+1 / 49
+
+A Data Network
+
+Consists of
+• links that interconnect
+• … hosts and routers in order to
+
+router
+
+• … move data between hosts via routers
+• hosts also called end systems
+• routers sometimes called switches
+
+link
+
+host
+
+The Internet
+• A large, global, data network
+• Focus of this class
+
+2 / 49
+
+The Internet
+
+Connects many types of hosts
+
+Today
+• many devices Internet-connected
+• even ones you might not have
+thought were
+
+3 / 49
+
+A Macroscopic View
+
+How hosts connect to the network
+
+Hosts
+
+Wireless
+
+• laptops
+• smartphones
+• other smart devices
+
+Links
+• wired
+• wireless
+
+Wired
+
+4 / 49
+
+A Macroscopic View
+Networks and Routers
+
+Routers
+• wireless access points
+• cell towers
+• wired switches
+
+Networks
+• local ISPs
+• campus networks
+• national ISPs
+
+5 / 49
+
+A Macroscopic View
+Who owns routers and links?
+
+The Internet
+
+Networks
+• owned and managed by different entities
+• e.g., USC, AT&T, Verizon
+
+Collection of networks constitutes Internet
+
+6 / 49
+
+A Macroscopic View
+Services
+
+Search
+
+Many services
+• run on the Internet
+• e.g., Zoom, Google search
+
+Zoom
+
+• implemented using software (e.g., apps)
+
+7 / 49
+
+A Macroscopic View
+Services use the Internet
+
+Search
+
+Networks
+• carry traffic between hosts
+• e.g., video in Zoom call, query in search
+
+8 / 49
+
+A Macroscopic View
+
+But how do networks communicate?
+
+IP
+
+Standardized communication
+• the Internet Protocol
+• a universal language for communicating
+data
+• described in RFC 791 (a standards
+document)
+
+9 / 49
+
+The Need for Routers and Networks
+Why not connect hosts directly?
+
+Directly connecting N hosts
+• to each other would require N2 links!
+• much cheaper to have a shared network
+• if not everyone communicates
+• … with everyone else all the time!
+
+Other networks built this way
+• the road network
+
+United airlines network
+
+• the airline network
+
+10 / 49
+
+A Shared Network
+
+Sharing!
+
+Apps and Hosts
+• share routers and links
+• red and blue traffic go over same link
+
+11 / 49
+
+Two Ways to Share Switched Networks
+
+Circuit Switching
+
+Packet Switching
+
+12 / 49
+
+Circuit switching
+What is it?
+
+Circuit
+• a connection between sender and receiver
+• … with dedicated resources
+
+Analogy
+• multiple lanes between each pair of routers
+• circuit uses one of these lanes at each hop
+
+13 / 49
+
+Circuit switching
+How is it implemented?
+
+Frequency-division multiplexing
+• optical cables have different frequencies
+• each circuit sent on a different frequency
+
+Time-division multiplexing
+• data from different connections
+• .. sent in different time slots
+Implementing Circuit Switching
+
+14 / 49
+
+Aside: Multiplexing and De-Multiplexing
+
+Multiplexing
+• combine multiple streams into a single
+stream
+• e.g., multiple connections into traffic on a
+link
+
+De-multiplexing
+• disentangle multiple streams from single
+stream
+Implementing Circuit Switching
+
+15 / 49
+
+Packet Switching
+What is a packet?
+
+Packet
+• a unit of data transmitted on network
+• have a maximum size (L bits in figure)
+• large transfers divided into multiple packets
+
+16 / 49
+
+Packet Switching
+
+What do routers do with packets?
+
+Store and Forward
+• router waits to receive full packet
+• stores it locally
+• forwards it towards destination
+
+17 / 49
+
+Packet Switching
+Queueing at routers
+
+Queue
+• a sequence of packets stored in a router
+• … waiting to be transmitted
+
+Queues form
+• packets arrive faster than can be sent out
+• if queue is large, router may drop packet
+
+A packet-switched network can drop traﬀic
+
+18 / 49
+
+Which Is Better?
+Pros and Cons
+
+Packet switching
+
+Circuit switching
+Pros
+
+Pros
+
+• Predictable performance
+
+• No circuit setup, faster transfers
+
+• Simple/fast switching (once circuit
+established)
+
+• Easier failure handling, re-route on different
+path
+
+Cons
+• Complexity and delay of circuit
+setup/teardown
+• If switch fails, its circuit(s) fails
+
+Cons
+• Packets can be dropped, impacting
+performance
+• Queueing can add delays
+
+19 / 49
+
+Statistical Multiplexing
+
+Why the Internet uses packet switching
+
+Computer communication is bursty
+• applications/services have on/off behavior
+• send traffic, stay silent, then send traffic again
+
+Packet switched networks
+• can more efficiently support bursty traffic
+• because of statistical multiplexing
+
+20 / 49
+
+Statistical Multiplexing
+An Example
+
+Circuit switching
+• can only support 10 users
+• must build network for worst case
+• (or must drop call)
+
+Packet switching
+• can support 35 users
+• because probability that all 10 users
+• … are active at the same time is 0.0004
+
+21 / 49
+
+Statistical Multiplexing
+Overload
+
+Statistical multiplexing
+• with high probability, support more users
+• (or, build a cheaper network)
+
+Overload
+• when more than 10 users arrive together
+• refuse service, or degrade service
+
+Statmux widely used in shared resources
+
+22 / 49
+
+Course Focus: Packet-switched networks
+
+23 / 49
+
+What Can a Network Do to a Packet?
+One of two things!
+
+1
+
+Delay the packet (e.g., queueing at router)
+
+2
+
+Drop the packet (e.g., when queue is full)
+
+Both can reduce traﬀic rate
+
+24 / 49
+
+Measures of Network Performance
+
+1
+
+End-to-end delay
+
+2
+
+Packet loss rate
+
+3
+
+Throughput
+
+25 / 49
+
+End-to-end Delay
+
+Let
+• tsent be time sent
+
+End-to-end delay
+
+• trec time received
+
+End-to-end delay
+• trec − tsent
+
+26 / 49
+
+Components of End-to-end Delay
+Delays within a single router
+
+Components
+
+Depends upon
+
+Transmission (dtrans )
+
+Link speed
+
+Propagation (dprop )
+
+Link distance
+
+Queuing (dqueue )
+
+Traffic on link
+
+Processing (dproc )
+
+CPU on switch
+
+drouter = dqueue + dproc + dprop + dtrans
+
+27 / 49
+
+Transmission delay
+
+Time to push all bits onto a link
+
+Let
+• L: packet size (length) in bits
+• R: link transmission rate (bits per second)
+• R is sometimes called link bandwidth
+dtrans = L/R
+
+28 / 49
+
+Propagation delay
+
+Time to send one bit from one router to next
+
+Let
+• d: length of physical link
+• s: propagation speed (approx. speed of
+light)
+dprop = d/s
+
+29 / 49
+
+Packet Delay: Sending a 100-Byte Packet
+The difference between propagation and transmission delay
+
+Higher bandwidth → lower
+transmission latency
+
+30 / 49
+
+Pipe Model of a Link
+What is a model?
+
+Model
+• a mathematical or mental construct
+• … that helps understand a physical process
+
+Pipe model
+• A link is not really a pipe (it doesn’t carry
+water!)
+• But we can use a pipe to understand link
+behavior
+
+Will use this later in the course
+
+31 / 49
+
+Pipe Model of a Link
+
+Pipe
+• width is link bandwidth
+• length is time
+• packet is a blob
+• packet width is transmission time
+
+Higher bandwidth
+• means wider pipe
+• … so smaller packet width
+• (packet size stays the same)
+
+32 / 49
+
+Queueing
+
+Why do queues form at routers?
+
+If packets
+• arrive faster than
+• .. router can process
+• .. they are placed into a queue
+
+Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Transient overload when packets are queued
+
+33 / 49
+
+Queueing
+
+Why do queues form at routers?
+
+If packets
+• arrive faster than
+• .. router can process
+• .. they are placed into a queue
+
+Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Transient overload when packets are queued
+
+33 / 49
+
+Queueing
+
+Why do queues form at routers?
+
+If packets
+• arrive faster than
+• .. router can process
+• .. they are placed into a queue
+
+Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Transient overload when packets are queued
+
+33 / 49
+
+Queueing
+
+Why do queues form at routers?
+
+If packets
+• arrive faster than
+• .. router can process
+• .. they are placed into a queue
+
+Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Transient overload when packets are queued
+
+33 / 49
+
+Queueing
+
+Why do queues form at routers?
+
+If packets
+• arrive faster than
+• .. router can process
+• .. they are placed into a queue
+
+Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Transient overload when packets are queued
+
+33 / 49
+
+Queueing
+
+When do queues never form?
+
+If router
+• can process and send packets
+• .. faster than they arrive
+• .. no queues
+
+34 / 49
+
+Queueing
+
+When do queues never form?
+
+If router
+• can process and send packets
+• .. faster than they arrive
+• .. no queues
+
+34 / 49
+
+Queueing
+
+When can a router drop packets?
+
+If router
+• runs out of memory (buffer)
+• … it may drop a packet
+
+35 / 49
+
+Queueing
+
+Transient and Persistent Queues
+
+Depends on
+• Arrival rate at the queue
+• Nature of arriving traffic (bursty or not?)
+• Transmission rate of outgoing link
+
+Transient Queues
+• short-lived
+• caused by bursty traffic
+
+Persistent Queues
+• (relatively) long-lived
+• caused by high total arrival rate
+
+36 / 49
+
+Queueing Delay
+
+Per-packet Queueing delay
+• tp,e : time when packet p enters queue
+• tp,l : time when it leaves queue
+dqueue = tp,l − tp,e
+
+Characterized by statistical measures
+• Average queuing delay
+• Variance of queuing delay
+• Probability delay exceeds a threshold value
+
+37 / 49
+
+Aside: Queueing Theory
+The mathematics underlying queueing
+
+Complex mathematical discipline
+• studies queue behavior
+• under different arrival patterns
+• … different numbers of queues
+• … different queue processing (service)
+times
+
+Little’s Law, a basic result
+• a powerful result
+
+Terminology
+
+Notation
+
+Average Arrival Rate
+
+λ
+
+Average Wait Time
+
+W
+
+Average Length of Queue
+
+L
+
+• independent of arrival pattern
+• and service times
+L=λ×W
+
+38 / 49
+
+Processing Delay
+
+Router processing
+• read packet
+• … maybe modify it slightly
+
+dproc
+• is usually neglible
+
+39 / 49
+
+End-to-End Delay
+
+Delay at router
+drouter = dqueue + dproc + dprop + dtrans
+
+End-to-end delay
+• sum of delays at each router
+Σrouter drouter
+
+40 / 49
+
+End-to-End Delay
+Why do delays add up?
+
+Store-and-forward router
+• waits to receive full packet
+• before processing packet
+
+41 / 49
+
+Measures of Network Performance
+
+1
+
+End-to-end delay
+
+2
+
+Packet loss rate
+
+3
+
+Throughput
+
+42 / 49
+
+Packet Loss Rate
+
+Let
+• N be number of packets sent
+• l be number of packets dropped (or lost)
+• p be packet loss rate
+p = l/N
+
+43 / 49
+
+Packet Loss Rate
+
+Recovering from packet loss
+
+Hosts/applications
+• detect when a packet is lost
+• retransmit lost packets to recover from loss
+
+44 / 49
+
+Throughput
+Definitions
+
+Throughput
+• if B bits transferred from sender to receiver
+• … in time t
+• throughput = B/t
+
+Instantaneous throughput
+• when t is small
+• … usually a few milliseconds
+
+Average throughput
+• t is longer
+• … often the duration of a connection
+• can be less than instantaneous throughput
+45 / 49
+
+Throughput
+
+Dependence on link speed
+
+Throughput limited by link speed
+• Pipe model helps us understand this
+• Cannot be larger than Rc or Rs
+
+In this example
+• throughput less than min Rs , Rc
+• corresponding link is the bottleneck
+
+46 / 49
+
+Throughput
+
+Throughput across a network
+
+Traffic may share a link
+• network gives fair share of link bandwidth
+• in example, each connection get R/10 on
+backbone
+
+Where is the bottleneck?
+• can be Rc (e.g., home network)
+• or the backbone link
+• or the server link Rs
+
+47 / 49
+
+Summary
+
+Elements of Network
+
+Links, hosts, routers
+
+Internet
+
+Network of networks
+
+Sharing
+
+Circuit vs packet switching
+
+Packet switching
+
+Multiplexing, packet loss, queueing
+
+Measures
+
+Loss Rate, Delay, Throughput
+
+48 / 49
+
+Additional Reading
+
+1.1, 1.3, 1.4
+
+49 / 49
+
+

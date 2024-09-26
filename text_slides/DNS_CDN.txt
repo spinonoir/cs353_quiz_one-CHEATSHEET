@@ -1,0 +1,828 @@
+Naming and Content Distribution
+
+Ramesh Govindan
+September 7, 2024
+
+The Domain Name System
+
+1 / 46
+
+Host Naming
+
+Recap: URL
+• names and locates a web object
+• an important component: host-name
+protocol://host-name[:port]/directory-path/resource
+
+Next topic
+
+Uniform Resource Locator (URL)
+
+• how are hosts named?
+• host-names used for everything, not just
+Web
+
+2 / 46
+
+Internet Names and Addresses
+What they are
+
+Entities
+• hosts, routers, servers
+• other devices: smartphones,
+Internet-of-Things devices
+
+Addresses
+• labels for entities (also known as IP
+Addresses)
+• e.g., 141.212.113.143 (IPv4)
+• e.g., 2a00:1450:4016:80c::200e (IPv6)
+
+Names
+• e.g., cs.usc.edu
+• human-usable labels for machines
+• hierarchical schema
+
+The Domain Name System (DNS)
+• … maps machine name to address
+• A directory (binding) service
+
+• encodes entity’s network location
+
+3 / 46
+
+Internet Names and Addresses
+An Analogy
+
+Entities
+• humans
+• organizations
+
+Addresses
+• 941 Bloom Walk, Los Angeles, CA 90089
+• 1600 Pennsylvania Avenue NW, Washington
+DC 20500
+
+Names
+• Ramesh Govindan
+• University of Southern California
+• flat names
+
+The Domain Name System (DNS)
+• … maps machine name to address
+• A directory (binding) service
+
+4 / 46
+
+Internet Names and Addresses
+Naming Types and Hostname Schema
+
+Hierarchical Names
+• has a tree-like structure
+• e.g., cs.USC.edu
+• important for scaling
+
+DNS Schema
+• top-level domains (e.g., edu, gov, com)
+• multiple levels of sub-domains
+
+• postal addresses have hierarchy
+Top-level Domain
+
+Sub-domain
+
+Host name
+
+Flat Names
+• do not have structure
+
+www.
+
+cs.
+
+usc.
+
+edu
+
+• harder to scale
+
+5 / 46
+
+Internet Names and Addresses
+Why separate name from locator?
+
+Adds a Level of Indirection
+• means introducing names or references to
+objects
+• All problems in computer science can be
+solved by another level of indirection a
+
+Host Names
+• easier for humans to understand
+• hide changes to IP address (move/replace
+machine)
+a
+
+content
+
+www.nytimes.com
+
+function
+
+login.USC.edu
+
+organization
+
+cs.usc.edu
+
+service
+
+gmail.com
+
+physical location
+
+lsan.ca.frontiernet.net
+
+Hostnames can encode many attributes
+
+Butler Lampson
+
+6 / 46
+
+DNS: Beginnings
+
+When the Internet was Small
+
+Name-address mappings
+• in a hosts.txt file (archived here)
+• maintained by the Stanford Research
+Institute (SRI)
+• changes sent by email
+• sites downloaded periodically from SRI
+
+Hosts.txt from 1985
+7 / 46
+
+DNS: Beginnings
+
+When the Internet was Small
+
+As the Internet grew
+• high load on SRI servers
+• not unique names, inconsistent copies
+
+Aside: Centralized approaches
+• don’t scale
+• can be a single point of failure (SPOF)
+
+Hosts.txt from 1985
+8 / 46
+
+DNS Design
+
+Architecture
+• a distributed database of nameservers
+
+DNS today
+• handles trillions of requests per day
+• if it fails, you couldn’t use the Internet
+
+Aside: Distributed Designs
+• scale better
+• do not have a single point of failure
+• more complex, harder to manage
+
+9 / 46
+
+DNS Requirements
+
+Uniqueness
+
+No naming conflicts
+Large namespace
+
+Scalability
+
+High query rates
+Frequent updates
+
+Decentralized
+
+Org responsible for own updates
+
+Administration
+
+Runs own nameserver
+Highly available
+
+High Performance
+
+Fast lookups
+Eventually consistent
+
+10 / 46
+
+Components of the DNS
+
+Component
+
+Description
+
+record schema
+
+records contain information about entity
+
+query protocol
+
+host query nameservers for records
+
+nameserver
+
+where nameservers are
+
+organization
+
+and who runs them
+The DNS has three components
+
+11 / 46
+
+Nameserver Organization
+
+Hierarchical Organization
+• servers organized hierarchically
+• servers administered hierarchically
+• this is why DNS chose hierarchical
+naming!
+Nameserver Hierarchy
+
+12 / 46
+
+Nameserver Organization
+Server Hierarchy
+
+Top of hierarchy: Root servers
+• Location hardwired into other servers
+
+Next Level: Top-level domain (TLD) servers
+• .com, .edu, etc.
+• contain records for authoritative DNS
+servers
+
+Nameserver Hierarchy
+
+13 / 46
+
+Nameserver Organization
+Server Hierarchy
+
+Bottom Level: Authoritative DNS servers
+• stores DNS records for hosts
+• USC’s DNS server stores USC.edu records
+Nameserver Hierarchy
+
+14 / 46
+
+Nameserver Organization
+Administrative Hierarchy
+
+Top of hierarchy: Root servers
+• Usually, a non-profit coordination agency
+• e.g., Internet Corporation for Assigned
+Names and Numbers
+• Fun fact: USC-ISI runs some root servers
+
+Nameserver Hierarchy
+
+15 / 46
+
+Nameserver Organization
+Administrative Hierarchy
+
+Next Level: Top-level domain (TLD) servers
+• companies called domain registrars
+• e.g., Verisign
+
+Bottom Level: Authoritative DNS servers
+• each organization runs its own servers
+• USC runs the nameservers for *.USC.edu
+
+Nameserver Hierarchy
+
+16 / 46
+
+Nameserver Organization
+Hierarchical Lookup
+
+To find IP address of login.USC.edu
+• ask root name server for .edu nameserver
+• ask .edu nameserver for .USC nameserver
+• ask .USC nameserver for address of
+login.USC.edu
+Nameserver Hierarchy
+
+17 / 46
+
+Nameserver Organization
+Root Name Servers
+
+Most lookups
+• access root name servers
+• these can become a bottleneck
+
+Root servers
+• distributed across the globe, load spread
+across servers
+• run by different companies, for resilience
+• alleviate load by caching
+
+https://root-servers.org
+
+18 / 46
+
+Nameserver Organization
+Reliability
+
+Must withstand
+• failures and attacks
+• multiple root name servers for this reason
+
+Other reliability techniques
+• primary and secondary (backup)
+nameservers
+
+19 / 46
+
+Nameserver Organization
+What servers store
+
+Resource Record
+• unit of information in the DNS
+• facilitates lookup
+
+Authoritative Name Servers
+• store resource records for all DNS names in
+domain
+• e.g., USC’s name server for all *.USC.edu
+
+Nameserver Hierarchy
+
+20 / 46
+
+Nameserver Organization
+What servers store
+
+Other Servers
+• every server has a record for the root
+• root nameservers have records for top-level
+domains
+• … and so on
+
+Records distributed across nameservers
+
+Nameserver Hierarchy
+
+21 / 46
+
+Components of the DNS
+
+Component
+
+Description
+
+record schema
+
+records contain information about entity
+
+query protocol
+
+host query nameservers for records
+
+nameserver
+
+where nameservers are
+
+organization
+
+and who runs them
+The DNS has three components
+
+22 / 46
+
+Resource Records
+Record Format
+
+name, value, type, TTL
+
+Type = A: (→ Address)
+
+Type = CNAME: (→ Canonical Name)
+
+• name = hostname
+
+• name = alias for canonical (real) name
+
+• value = IP address
+
+• value = real name
+
+Type = NS: (→ Name Server)
+
+Type = MX: (→ Mail server)
+
+• name = domain
+
+• name = domain name
+
+• value = name of DNS server for domain
+
+• value = mail server for domain
+
+23 / 46
+
+Resource Records
+
+How to add them to the DNS?
+
+1 Register foobar.com at registrar
+• Provide registrar with names and IP addresses of your authoritative name server(s)
+
+2 Registrar inserts RR pairs into the .com TLD server:
+• (foobar.com, dns1.foobar.com, NS)
+• (dns1.foobar.com, 212.44.9.129, A)
+
+3 Store resource records in your server dns1.foobar.com
+• e.g., type A record for www.foobar.com
+• e.g., type MX record for foobar.com
+
+24 / 46
+
+Components of the DNS
+
+Component
+
+Description
+
+record schema
+
+records contain information about entity
+
+query protocol
+
+host query nameservers for records
+
+nameserver
+
+where nameservers are
+
+organization
+
+and who runs them
+The DNS has three components
+
+25 / 46
+
+DNS Protocol
+
+For getting resource records
+
+Query
+• contains (multiple) name and type
+
+Response
+• returns (multiple) value and TTL
+corresponding to query
+
+26 / 46
+
+Resource Records
+
+Obtaining them using DNS Protocol
+
+Using the command line
+• tool called dig
+• can be used to look up RRs
+
+Find a domain’s name server
+• dig USC.edu NS
+
+Get NS record
+
+27 / 46
+
+Resource Records
+Looking up an IP address
+
+Look up IP address
+• from authoritative name server
+• dig @ns6.USC.edu www.USC.edu
+
+Get A record
+
+28 / 46
+
+Resource Records
+How dig works
+
+Name resolution steps
+
+Terminology
+
+1
+
+Client calls getaddrinfo() (example code)
+
+2
+
+This invokes resolver
+
+3
+
+Resolver queries default name server
+
+client dig, but you can write your own
+resolver implements the DNS protocol,
+runs on host
+default name server every machine has one
+
+Details
+• client gets hostname from URL or command
+line
+• default name server configured on host
+manually or using DHCPa
+a
+
+Dynamic Host Configuration Protocol (quick intro)
+
+29 / 46
+
+Components of the DNS
+
+Component
+
+Description
+
+record schema
+
+records contain information about entity
+
+query protocol
+
+host query nameservers for records
+
+nameserver
+
+where nameservers are
+
+organization
+
+and who runs them
+The DNS has three components
+
+30 / 46
+
+Name Resolution
+
+Under the Hood: The Query Path
+
+31 / 46
+
+Name Resolution: Recursive
+Under the Hood: The Response Path
+
+32 / 46
+
+Name Resolution: Iterative
+A Different Request/Response Path
+
+33 / 46
+
+Name Resolution
+Caching
+
+Nameservers can cache responses
+• helps speed up response latency
+• DNS is a step in HTTP, latency is important
+• also helps reduce load
+
+What is cached where? Recursive
+• all nameservers on response path
+• … can cache www.nyu.edu
+• resolver (!), local DNS, root, TLD
+
+34 / 46
+
+Name Resolution
+Caching
+
+What is cached where? Iterative
+• local DNS can cache RRs for
+• root, TLD, NYU NS and www.nyu.edu
+
+Comparing the Two
+• recursive reduces load on DNS
+• iterative improves client latency
+
+35 / 46
+
+Name Resolution
+Caching: How it Works
+
+TTL in Response
+• Time-to-live specified how long response
+can be cached
+• Nameserver deletes cache after that time
+• Until then, it can respond with cached value
+
+TTL in Response
+
+36 / 46
+
+Name Resolution
+Reliability
+
+Every domain
+• has multiple name servers (replicas)
+• USC has 4
+
+Load balancing
+• responses contain these in different order
+• helps load balance
+
+Backup
+• if one doesn’t respond
+• timeout, and resend to other nameserver
+Multiple name servers
+
+37 / 46
+
+Content Distribution Networks
+
+38 / 46
+
+Making the Web Fast
+
+Optimizing connections
+• Persistent (latency)
+• Parallel/concurrent (bandwidth and latency)
+
+Request
+
+• Pipelined over the same connection
+(latency)
+
+Caching
+
+Response
+
+• Forward proxy: close to clients
+
+39 / 46
+
+Making the Web Faster
+
+Separate content creation from distribution
+
+Content creation and distribution
+• content creators (e.g., CNN, NY Times)
+• … also run distribution infrastructure (Web
+servers)
+• difficult to acquire technical expertise for
+this
+
+Content distribution networks
+• companies that distribute web content
+
+Request
+
+Response
+
+• content creators are their customers
+• most famous example: Akamai
+
+40 / 46
+
+Content Distribution
+How it works
+
+Creator
+• gives content (HTML, CSS, images)
+• … to content distributor (Akamai)
+
+Distributor
+• runs a content distribution network (CDN)
+
+Akamai CDN
+
+• of servers across globe
+• replicates content to servers
+
+Clients
+• access content from nearest replica
+
+Akamai
+content
+CNN
+
+41 / 46
+
+Content Distribution
+Why it Works
+
+Key Ideas
+• distributor specializes in fast, reliable
+content delivery
+• serves many customers, can provide
+cheaper delivery from economies of scale
+• replication spreads the load, enables fast
+access
+
+Akamai CDN
+
+Everyone benefits
+• creator: content delivered quickly, cheaply
+• clients: fast access to content
+• enterprises: replica reduces traffic costs
+
+Akamai
+content
+CNN
+
+42 / 46
+
+Akamai: Under the Hood
+
+New Akamai DNS names for each customer
+• e.g., a128.g.akamai.net for cnn.com
+
+Content creator modifies content
+• embedded URLs reference new domains
+(Akamaize content)
+• e.g.,
+http://www.cnn.com/image-of-the-day.gif
+becomes
+http://a128.g.akamai.net/image-of-the-day.gif
+
+Akamai server locations
+
+43 / 46
+
+Akamai: Under the Hood
+DNS Redirection
+
+New Akamai DNS names for each customer
+• e.g., a128.g.akamai.net for cnn.com
+• add a CNAME record for cnn.com
+
+Content creator modifies content
+• embedded URLs reference new domains
+(Akamaize content)
+• e.g.,
+http://www.cnn.com/image-of-the-day.gif
+becomes
+http://a128.g.akamai.net/image-of-the-day.gif
+
+Akamai server locations
+
+44 / 46
+
+Akamai: Under the Hood
+Direct clients to nearest replica
+
+Client browser
+• accesses CNN’s webpage
+• DNS sends cnn.com query to akamai.net
+(CNAME)
+
+B
+A
+
+Akamai nameserver
+• figures out client wants CNN content
+• Akamai’s mapping system figures out
+nearest replica
+• Akamai nameserver returns IP address of
+replica!
+
+A
+Akamai CDN
+
+B
+Akamai DNS
+
+Akamai
+content
+
+Dynamic name to address resolution
+
+CNN
+
+45 / 46
+
+Additional Reading
+
+2.4, 2.6
+
+46 / 46
+
+

@@ -1,0 +1,1303 @@
+The Web
+
+Ramesh Govindan
+September 4, 2024
+
+Widely-used Networked Applications
+
+Communication
+• E-mail
+
+Entertainment
+• Gaming
+• Video streaming (e.g., YouTube)
+
+• Text messaging
+• Social networking
+
+Information
+• Web (focus of this lecture)
+• Internet Search
+
+Telepresence
+• Voice over IP
+• Video conferencing (e.g., Zoom)
+
+Will learn later how many of these work
+
+1 / 55
+
+What is the Web?
+The Logical View
+
+Database of
+• hypertext documents
+
+Origins
+• in the 90s by Tim Berners-Lee at CERN
+• to facilitate scientific collaboration
+The Web: A Logical View
+
+2 / 55
+
+What is the Web?
+The Physical View
+
+Database
+• is distributed across many servers in the
+Internet
+• different hypertext documents on different
+servers
+
+Aside: Logical vs. Physical
+• logical view focuses on data relationships
+• physical view describes where data is stored
+• important distinction that will come up often
+
+The Web: The Physical View
+
+3 / 55
+
+What is the Web?
+Hypertext and Hyperlinks
+
+Hypertext
+• text containing hyperlinks
+
+Hyperlink
+• reference to a document containing
+hypertext
+• … or to other objects (audio, video)
+
+Hypertext example
+
+4 / 55
+
+What is the Web?
+
+Hypertext Markup Language
+
+HTML
+• language for marking up text
+• markups for formatting and hyperlinks
+HTML Example
+
+5 / 55
+
+What is the Web?
+How it works
+
+User
+• requests a hypertext document
+Request
+
+Browser
+• sends request to server over the Internet
+
+Server
+
+Response
+
+• responds with document contents (HTML)
+• browser renders the HTML
+
+6 / 55
+
+Focus of This Lecture
+
+How the Web works on the Internet
+• How to retrieve hypertext documents
+• How to make retrieval fast
+
+Request
+
+Aside: Functionality and Performance
+• How to retrieve hypertext documents →
+Functionality
+• How to make retrieval fast → Performance
+
+Response
+
+7 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+8 / 55
+
+Architecture
+
+Client-Server Architecture
+
+What is architecture?
+• how functions are distributed across
+network
+
+Clients
+• send requests to servers
+• examples: smartphone, laptop, desktop
+• may be intermittently connected
+
+Servers
+• return responses to clients
+• must be always on
+
+Web, Email, On-demand Video are client-server
+
+Client-server Architecture
+
+9 / 55
+
+Architecture
+
+Client-Server Architecture for the Web
+
+Clients
+• refers to software: browsers on laptops,
+smartphones
+• also refers to machine on which software
+runs: laptop, smartphone
+
+Servers
+• server software: Apache, nginx
+• refers to machine on which software runs:
+computer in a machine room
+Client-server Architecture
+
+10 / 55
+
+Architecture
+
+Aside: Are there other architectures?
+
+Peer-to-peer architecture
+• clients peer with each other and exchange
+information
+• no always-on servers
+
+Blockchains, file sharing
+
+Peer-to-peer Architecture
+
+11 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+12 / 55
+
+Naming and Addressing
+Fundamental concept in computing
+
+Name
+• a label assigned to object or entity (e.g.,
+person, computer)
+• sometimes required to be unique (globally,
+or within a country)
+
+Address (or Locator)
+• specifies where object or entity is located
+• examples: a person’s home address, a
+computer’s IP address
+
+Binding
+• association between name and locator
+• example: person’s name and their address
+• example: computer name (login.usc.edu)
+and IP address
+
+Sometimes a name also functions as a locator
+
+13 / 55
+
+Web Naming
+What to name
+
+What is named?
+• Initially, a hypertext document
+• Today, more generally, a Web object
+protocol://host-name[:port]/directory-path/resource
+Uniform Resource Locator (URL)
+
+Examples of Web objects
+• HTML files, video files, audio files, Javascript
+file
+• dynamically generated content (e.g., search
+content)
+
+14 / 55
+
+Web Naming
+
+URL is both a name and a locator
+
+Name
+• resource part of URL
+• names a Web object
+• by itself, not unique (e.g., index.html)
+protocol://host-name[:port]/directory-path/resource
+Uniform Resource Locator (URL)
+
+Address
+• protocol: how to retrieve object
+• host-name: which computer to find object
+• directory-path: where within computer
+
+URL for an object is globally unique
+
+15 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+16 / 55
+
+Web Object Retrieval
+
+Hypertext Transfer Protocol (HTTP)
+
+Request-response protocol
+• client sends request to server
+• waits to receive response from server
+
+Client
+• gets server name from host-name in URL
+• displays (renders) retrieved object
+
+Server
+• response includes requested object
+• may invoke processing to produce dynamic
+objects (search results)
+
+17 / 55
+
+Web Object Retrieval
+HTTP Request Message
+
+Parts
+• Request line
+• Header lines
+• Body
+
+Request line
+• method
+• resource path
+• protocol version
+
+18 / 55
+
+Web Object Retrieval
+
+HTTP Request Line: Method Types
+
+Method
+
+Function
+
+GET
+
+Download specified object
+
+HEAD
+
+Download headers of object
+
+POST
+
+Send form content
+
+PUT
+
+Upload specified file
+
+DELETE
+
+Remove object
+
+19 / 55
+
+Web Object Retrieval
+HTTP Request Line and Headers
+
+Resource path
+• name and path of resource
+• relative to server
+
+Protocol version
+• HTTP has undergone several revisions
+• v0.9, v1.1, v2 and now v3
+• versions backwards compatible
+
+Header lines
+• additional information
+• object size, client browser type, language
+used
+
+20 / 55
+
+Web Object Retrieval
+HTTP Request Body
+
+Body
+• empty for GET and HEAD
+• contains data for POST
+
+21 / 55
+
+Web Object Retrieval
+HTTP Response
+
+Status line
+• protocol version
+• status code (e.g., 200, 404)
+• status phrase (e.g., OK, File not found)
+
+Response headers
+• provide information
+
+Body
+• optional data
+
+22 / 55
+
+Web Object Retrieval
+How headers are sent in packets
+
+As ASCII text
+• many application protocols use this (e.g.,
+SMTP, FTP)
+• easy to implement, easy to debug
+• early versions of HTTP used this
+
+Binary
+• many lower level protocols use this
+• more efficient
+• more recent versions use this
+
+23 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+24 / 55
+
+Session State
+
+Understanding sessions
+
+What is a session?
+• an extended interaction between user and
+service
+• e.g., buying something on Amazon,
+scrolling through Facebook feed
+• can involve multiple HTTP
+requests/responses
+
+Add to
+cart
+
+Session
+
+Buy from
+
+cart
+
+Session state
+• information created during a session
+• and used in the same or another session
+• e.g., shopping cart, authentication token
+
+25 / 55
+
+Session State
+
+Persisting state across HTTP connections
+
+Problem
+• Request ( 1 ) adds to cart
+• How can request 2 tell server to use cart?
+
+Need
+• a way to store (persist) the cart on the server
+(state)
+• a way for the client to name the state
+
+1
+
+Add to
+cart
+
+2
+
+Buy from
+
+Session
+
+cart
+
+26 / 55
+
+Session State
+Cookies
+
+HTTP allows Cookies
+• Cookie is a token that names some state on
+server
+• e.g., can be a number 3456, server knows it
+refers to cart
+
+1
+
+Add to
+cart
+
+2
+
+Buy from
+
+Session
+
+How they work
+
+cart
+
+• server sends cookie in header of response
+to 1
+• client sends cookie in header of request 2
+
+27 / 55
+
+Session State
+
+A More Detailed Look at Cookies
+
+Server
+• stores state (cart) in backend database
+• creates a cookie, returns with response
+
+Browser
+• receives cookie, stores in local file
+• sends cookie to server along with
+subsequent requests
+
+Other uses
+• usage tracking, authentication
+Detailed Example
+
+Lots of privacy issues with cookies
+
+28 / 55
+
+Cookies Considered Harmful
+Can track website usage
+
+First-party cookies
+• installed by website you visit (e.g.,
+www.nytimes.com)
+
+Third-party cookies
+• installed by advertisers on website you visit
+(e.g., www.adx.com)
+• if the same advertiser is on another page,
+say www.latimes.com
+• they can know you visited both pages!
+
+Third-party cookies
+
+29 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+30 / 55
+
+Improving HTTP Performance
+
+Page load time
+• between click and display of page
+
+Impacts revenue
+• every 100ms increase led to 1% drop in revenue [Amazon]
+• every 0.5s increase in search led to 20% user drop [Google]
+
+31 / 55
+
+Background: HTTP and TCP
+HTTP Uses TCP
+
+HTTP message in TCP payload
+
+TCP
+
+Internet transport protocol that provides reliable
+delivery
+
+HTTP
+
+sends request and receives response using TCP
+
+32 / 55
+
+Background: HTTP and TCP
+Must set up TCP connection
+
+TCP Connection Setup
+
+TCP requires
+connection setup before sending request
+
+HTTP Request Response
+
+33 / 55
+
+Anatomy of a Page Load
+
+Steps
+• download base HTML page
+
+Example
+page x.html contains y.css and image z.png
+
+x.html
+Page Load Time
+
+• download linked object (CSS, images,
+javascript)
+• render page
+
+y.png
+
+z.css
+
+Render
+
+34 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+35 / 55
+
+Improving Performance: Persistent Connections
+
+Original design
+• open TCP connection for each object
+
+TCP Connection Setup
+
+• adds 2 round-trip times (RTTs)
+index.html
+
+Persistent connections
+
+send multiple requests and responses on the
+same connection
+
+y.png
+z.css
+
+36 / 55
+
+Improving Performance: Parallel connections
+Original design
+• All requests and responses in a single
+connection
+
+Parallel connections
+• Send connections to server over multiple
+connections
+• Fixed number of parallel connections (4)
+
+Drawback
+
+TCP Connection Setup
+
+index.html
+
+y.png
+
+z.css
+
+• Unfair to other users/browsers
+• Internet allocates resources fairly to TCP
+connections
+
+37 / 55
+
+Improving Performance: Pipelining
+
+Original design
+Send request after receiving response for
+previous request
+
+Pipeline requests
+Send multiple requests back-to-back
+
+TCP Connection Setup
+
+index.html
+
+Drawback: Head-of-line blocking
+• if y.img is large, z.css can be delayed
+
+y.png, z.css
+
+• more generally, small objects delayed
+behind large ones
+
+38 / 55
+
+Improving Performance: Prioritization
+
+Server responds
+In order in which requests are received
+
+Prioritization
+• Server sends some types of objects before
+others
+• CSS before images
+• Can start rendering before receiving all
+objects
+
+TCP Connection Setup
+
+index.html
+
+Server sends z.
+Start rendering
+
+39 / 55
+
+Improving Performance: QUIC
+A New Transport Protocol for Web
+
+Like TCP
+• connection oriented reliable transfer
+• looks to the network like a TCP connection
+
+Unlike TCP
+• has sub-connections inside QUIC connection
+• different requests on different sub-connections
+
+Advantages
+• fairer than parallel connections
+• avoids head-of-line blocking like pipelining
+
+40 / 55
+
+HTTP Versions
+
+Version Number
+
+Functionality
+
+1.0
+
+Non-persistent, parallel
+
+1.1
+
+Persistent, pipelining
+
+2.0
+
+Prioritization
+
+3.0
+
+QUIC
+
+41 / 55
+
+A Simple Performance Model
+How do these techniques help?
+
+Model
+• simplified version of some system
+• helps understand behavior of system
+
+Performance Model
+• for understanding performance
+• often uses mathematics
+
+HTTP Performance Model
+• assume TCP connection takes one
+round-trip time (RTT)
+• assume request/response takes one RTT
+
+Feature
+
+Number of RTTs
+
+Non-persistent
+
+2N
+
+Parallel
+
+2N/M
+
+Persistent
+
+N+1
+
+Pipelined
+
+2
+
+• assume page references N objects, M
+parallel connections
+42 / 55
+
+Lecture Outline
+Functionality
+1
+
+Architecture
+
+2
+
+Naming
+
+3
+
+Retrieval
+
+4
+
+State Management
+
+Performance
+1
+
+Pipelining
+
+2
+
+Parallelism
+
+3
+
+Prioritization
+
+4
+
+Caching
+
+Request
+
+Response
+
+43 / 55
+
+Caching
+
+The General Idea
+
+What is caching?
+A technique to speed up access to objects
+stored at some origin
+
+A
+
+B
+
+A
+
+B
+
+Key idea
+• A cache is a store of recently-accessed
+objects
+• Requestor can get object from cache
+instead of origin
+
+Faster
+1
+
+If object is frequently accessed
+
+2
+
+If cache is faster than origin
+
+Origin
+
+Cache
+
+Origin
+
+44 / 55
+
+Caching
+Terminology
+
+Locality of Reference
+• references to an object are nearby (local) in
+time
+• caching works for objects with high locality
+
+A
+
+B
+
+A
+
+B
+
+Hits and Misses
+hit object is in cache
+
+Origin
+
+Cache
+
+miss object is not in cache, must be
+fetched from origin
+
+Eviction
+• caches have limited storage
+
+Origin
+
+• if caches is full, may need to evict object to
+make room for another
+45 / 55
+
+Caching
+Terminology
+
+Eviction
+
+A
+
+B
+
+A
+
+B
+
+• caches have limited storage
+• if caches is full, may need to evict object to
+make room for another
+
+Origin
+
+Cache
+
+Stale object
+• if origin modifies object
+• cached copy is stale
+
+Origin
+
+46 / 55
+
+Caching
+Examples
+
+A
+
+Application
+
+Cache
+
+Origin
+
+File Systems
+
+DRAM
+
+Disk
+
+Process Memory
+
+On-chip
+
+DRAM
+
+B
+
+Origin
+
+A
+
+B
+
+Cache
+
+Origin
+
+47 / 55
+
+Browser Caching
+Browser
+• saves a copy of Web object page on disk
+• can use local copy when website revisited
+
+Advantages
+• speeds up page load time
+
+x.html
+
+• saves network bandwidth
+
+Very effective
+• for objects that don’t change often
+• images, stylesheets, javascript, videos
+
+y.png
+
+Cache objects on disk
+
+z.css
+
+Render
+
+But, how to determine if cache is stale?
+
+48 / 55
+
+Cache Control
+
+Determining and controlling staleness
+
+If-Modified-Since
+• header in request, contains time t
+• server returns object if modified after t
+• saves object download
+
+GET /somedir/page.html HTTP/1.1
+Host: www.someschool.edu
+User-agent: Mozilla/4.0
+If-modified-since: Wed, 18 Jan 2017 10:25:50 GM
+(blank line)
+
+Cache-Control
+• header in response, contains duration d
+• browser can cache for d seconds
+Cache control header
+
+49 / 55
+
+Proxy Caching
+
+Beyond browser caching
+
+Key idea
+• leverage locality across multiple users
+• two users accessing the same content
+
+How it works
+• configure browser to send all requests to
+proxy
+• if proxy does not have object, gets from
+origin
+• origin can use Cache-Control header
+
+Proxy cache
+
+50 / 55
+
+Forward Proxy
+Cache close to clients
+
+Common use case
+• cache inside a university or enterprise
+
+Benefits
+users low latency, since proxy closer
+than origin
+university less traffic, saves cost
+Forward proxy
+
+51 / 55
+
+Reverse Proxy
+Cache close to origin
+
+Common use case
+• one or more caches in front
+• … of origin servers
+
+Benefits
+users small latency benefit (if
+in-memory cache)
+content provider reduce load on origin, save
+cost
+
+Reverse proxy
+
+52 / 55
+
+Caching Efficacy
+
+Quantifying benefit of caching
+
+Hit rate
+• fraction h of requests
+• … whose content is in cache
+
+Latency benefit
+• latency to cache is dc
+• latency to origin is do
+• expected response latency
+h × dc + (1 − h) × do
+Forward proxy
+
+Quantify bandwidth benefit in the same way
+
+53 / 55
+
+Summary
+The Web
+
+Architecture
+
+Client-server vs peer-to-peer
+
+Naming
+
+Names, addresses, Web naming
+
+HTTP
+
+Request/response headers
+
+Session management
+
+Cookies and their side-effects
+
+Protocol performance
+
+Persistent connections, pipelining
+
+Caching
+
+Forward and reverse proxies
+
+54 / 55
+
+Additional Reading
+
+2.2
+
+55 / 55
+
+
